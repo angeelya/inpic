@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "like")
+@Table(name = "image_like")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

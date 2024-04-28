@@ -14,7 +14,8 @@ public class CommentNotification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Boolean read;
+    @Column(name="is_read")
+    private boolean isRead;
     @JoinColumn(name = "comment_id")
     @OneToOne(optional = false,cascade = CascadeType.ALL)
     private Comment comment;

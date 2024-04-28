@@ -14,7 +14,8 @@ public class SubscriptionNotification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Boolean read;
+    @Column(name="is_read")
+    private boolean isRead;
     @JoinColumn(name = "friend_id")
     @OneToOne(optional = false,cascade = CascadeType.ALL)
     private Friend friend;

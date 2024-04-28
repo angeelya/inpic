@@ -1,4 +1,4 @@
-package angeelya.inPic.auth.dto;
+package angeelya.inPic.auth.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
-    public String login;
-    private String email;
-    private String password;
+public class JwtTokenResponse {
+    private String jwtToken;
 }
