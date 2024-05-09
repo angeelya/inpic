@@ -1,23 +1,24 @@
-package angeelya.inPic.model;
+package angeelya.inPic.database.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "friend")
+@Table(name = "image_like")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Friend {
+public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
     @JoinColumn(name = "user_id")
+    @ManyToOne(optional = false,cascade = CascadeType.ALL)
     private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "friend_id")
-    private User friend;
+    @JoinColumn(name = "image_id")
+    @ManyToOne(optional = false,cascade = CascadeType.ALL)
+    private Image image;
 }

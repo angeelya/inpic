@@ -1,4 +1,4 @@
-package angeelya.inPic.model;
+package angeelya.inPic.database.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

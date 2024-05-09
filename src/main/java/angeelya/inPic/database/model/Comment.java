@@ -1,25 +1,25 @@
-package angeelya.inPic.model;
-
+package angeelya.inPic.database.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "admin_notification")
+@Table(name = "comment")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminNotification {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="is_read")
-    private boolean isRead;
+    private String text;
     @JoinColumn(name = "user_id")
     @ManyToOne(optional = false,cascade = CascadeType.ALL)
     private User user;
-    @JoinColumn(name = "deleted_image_id")
-    @OneToOne(optional = false,cascade = CascadeType.ALL)
-    private DeletedImage deletedImage;
+    @JoinColumn(name = "image_id")
+    @ManyToOne(optional = false,cascade = CascadeType.ALL)
+    private Image image;
 }

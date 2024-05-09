@@ -1,18 +1,21 @@
-package angeelya.inPic.model;
+package angeelya.inPic.database.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "saved_image")
+@Table(name = "action")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SavedImage {
+public class Action {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Double grade;
     @JoinColumn(name = "user_id")
     @ManyToOne(optional = false,cascade = CascadeType.ALL)
     private User user;

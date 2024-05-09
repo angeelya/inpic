@@ -1,13 +1,15 @@
-package angeelya.inPic.model;
+package angeelya.inPic.database.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "user_image")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserImage {
