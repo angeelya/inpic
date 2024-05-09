@@ -1,4 +1,4 @@
-package angeelya.inPic.auth.validation;
+package angeelya.inPic.validation.annotation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -6,11 +6,11 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = UniqueLoginValidator.class)
+@Constraint(validatedBy = UniqueEmailValidator.class)
 @Target({ElementType.PARAMETER, ElementType.FIELD,ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UniqueLogin {
-    String message() default "A user with the same login already exists";
+public @interface UniqueEmail {
+    String message() default "A user with the same email already exists";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

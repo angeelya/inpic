@@ -1,6 +1,6 @@
 package angeelya.inPic.auth.service;
 
-import angeelya.inPic.auth.repository.UserRepository;
+import angeelya.inPic.database.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

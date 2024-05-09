@@ -1,11 +1,10 @@
-package angeelya.inPic.auth.validation;
+package angeelya.inPic.validation.annotation;
 
-import angeelya.inPic.auth.repository.UserRepository;
-import angeelya.inPic.model.User;
+import angeelya.inPic.database.repository.UserRepository;
+import angeelya.inPic.database.model.User;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -15,7 +14,6 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail,Str
     private final UserRepository userRepository;
     @Override
     public void initialize(UniqueEmail constraintAnnotation) {
-        ConstraintValidator.super.initialize(constraintAnnotation);
     }
 
     @Override

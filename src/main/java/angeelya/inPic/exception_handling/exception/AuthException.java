@@ -1,4 +1,4 @@
-package angeelya.inPic.auth.exception;
+package angeelya.inPic.exception_handling.exception;
 
 public class AuthException extends Exception{
     public AuthException(String message) {

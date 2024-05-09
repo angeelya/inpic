@@ -1,12 +1,12 @@
 package angeelya.inPic.auth.service;
 
-import angeelya.inPic.auth.dto.response.JwtTokenResponse;
-import angeelya.inPic.auth.dto.request.LogInRequest;
-import angeelya.inPic.auth.dto.request.RegisterRequest;
-import angeelya.inPic.auth.exception.AuthException;
-import angeelya.inPic.auth.repository.UserRepository;
-import angeelya.inPic.model.Role;
-import angeelya.inPic.model.User;
+import angeelya.inPic.dto.response.JwtTokenResponse;
+import angeelya.inPic.dto.request.LogInRequest;
+import angeelya.inPic.dto.request.RegisterRequest;
+import angeelya.inPic.exception_handling.exception.AuthException;
+import angeelya.inPic.database.repository.UserRepository;
+import angeelya.inPic.database.model.Role;
+import angeelya.inPic.database.model.User;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -32,15 +32,16 @@ public class AuthenticationService {
                 .role(Role.USER).build();
         userRepository.save(user);
         var jwt = jwtService.generateToken(user);
-        return JwtTokenResponse.builder().jwtToken(jwt).build();
+        return JwtTokenResponse.builder().user_id(user.getId()).jwtToken(jwt).role(user.getRole().name()).build();
     }
 
     public JwtTokenResponse logIn(LogInRequest request) throws AuthException {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getLogin(), request.getPassword()));
-            var jwt = jwtService.generateToken(userRepository.findByLogin(request.getLogin()).get());
-            return JwtTokenResponse.builder().jwtToken(jwt).build();
+            User user=userRepository.findByLogin(request.getLogin()).get();
+            var jwt = jwtService.generateToken(user);
+            return JwtTokenResponse.builder().jwtToken(jwt).user_id(user.getId()).role(user.getRole().name()).build();
         } catch (AuthenticationException e) {
             logger.info(e.getMessage());
             throw new AuthException("Invalid username or password");
