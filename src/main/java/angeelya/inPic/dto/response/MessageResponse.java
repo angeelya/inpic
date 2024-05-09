@@ -1,4 +1,4 @@
-package angeelya.inPic.auth.dto.response;
+package angeelya.inPic.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

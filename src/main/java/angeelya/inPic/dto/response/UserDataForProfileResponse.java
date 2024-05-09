@@ -1,6 +1,5 @@
-package angeelya.inPic.auth.dto.request;
+package angeelya.inPic.dto.response;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LogInRequest {
-    @NotNull
+public class UserDataForProfileResponse {
     private String login;
-    @NotNull
-    private String password;
+    private String name;
+    private String description;
+    private byte[] userImage;
 }

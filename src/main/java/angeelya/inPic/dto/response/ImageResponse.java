@@ -1,4 +1,4 @@
-package angeelya.inPic.auth.dto.response;
+package angeelya.inPic.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class JwtTokenResponse {
-    private String jwtToken;
+public class ImageResponse {
+    private Long id;
+    private byte[] image;
+    private String name;
 }
