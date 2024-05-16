@@ -2,7 +2,7 @@ package angeelya.inPic.user.controller;
 
 import angeelya.inPic.dto.request.UserInformationRequest;
 import angeelya.inPic.dto.response.UserDataForProfileResponse;
-import angeelya.inPic.exception_handling.exception.DatabaseNotFoundException;
+import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.user.service.UserProfileService;
 import angeelya.inPic.exception_handling.exception.ValidationErrorsException;
 import angeelya.inPic.validation.service.ValidationErrorsService;
@@ -20,7 +20,7 @@ public class UserProfileController {
     private final ValidationErrorsService validationErrorsService;
     private final UserProfileService userProfileService;
     @PostMapping("/data")
-    public ResponseEntity<UserDataForProfileResponse>getUserProfileData(@RequestBody @Valid UserInformationRequest userInformationRequest, BindingResult bindingResult) throws ValidationErrorsException, DatabaseNotFoundException {
+    public ResponseEntity<UserDataForProfileResponse>getUserProfileData(@RequestBody @Valid UserInformationRequest userInformationRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException {
         validationErrorsService.validation(bindingResult);
         return ResponseEntity.ok(userProfileService.getUserData(userInformationRequest));
     }

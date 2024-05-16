@@ -5,7 +5,7 @@ import angeelya.inPic.dto.request.DescriptionUpdateRequest;
 import angeelya.inPic.dto.request.EmailUpdateRequest;
 import angeelya.inPic.dto.request.NameUpdateRequest;
 import angeelya.inPic.dto.request.PasswordUpdateRequest;
-import angeelya.inPic.exception_handling.exception.DatabaseNotFoundException;
+import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.PasswordUpdateException;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +21,13 @@ import java.util.Optional;
 public class UserSettingsService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final UserRepository userRepository;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final String MS_SUCCESS = "updating is successful", MS_FAILED = "Failed to update", MS_FAILED_ADD = "Failed to add to BD";
 
 
-    public String updateEmail(EmailUpdateRequest emailUpdateRequest) throws DatabaseNotFoundException, NoAddDatabaseException {
-        User user = getUser(emailUpdateRequest.getUser_id());
+    public String updateEmail(EmailUpdateRequest emailUpdateRequest) throws NotFoundDatabaseException, NoAddDatabaseException {
+        User user = userService.getUser(emailUpdateRequest.getUser_id());
         user.setEmail(emailUpdateRequest.getEmail());
         user = userRepository.save(user);
         if (!user.getEmail().equals(emailUpdateRequest.getEmail())) {
@@ -36,8 +37,8 @@ public class UserSettingsService {
         return "Email " + MS_SUCCESS;
     }
 
-    public String updateName(NameUpdateRequest nameUpdateRequest) throws DatabaseNotFoundException, NoAddDatabaseException {
-        User user = getUser(nameUpdateRequest.getUser_id());
+    public String updateName(NameUpdateRequest nameUpdateRequest) throws NotFoundDatabaseException, NoAddDatabaseException {
+        User user = userService.getUser(nameUpdateRequest.getUser_id());
         user.setName(nameUpdateRequest.getName());
         user = userRepository.save(user);
         if (!user.getName().equals(nameUpdateRequest.getName())) {
@@ -47,8 +48,8 @@ public class UserSettingsService {
         return "Name " + MS_SUCCESS;
     }
 
-    public String updateDescription(DescriptionUpdateRequest descriptionUpdateRequest) throws DatabaseNotFoundException, NoAddDatabaseException {
-        User user = getUser(descriptionUpdateRequest.getUser_id());
+    public String updateDescription(DescriptionUpdateRequest descriptionUpdateRequest) throws NotFoundDatabaseException, NoAddDatabaseException {
+        User user = userService.getUser(descriptionUpdateRequest.getUser_id());
         user.setDescription(descriptionUpdateRequest.getDescription());
         user = userRepository.save(user);
         if (!user.getName().equals(descriptionUpdateRequest.getDescription())) {
@@ -58,8 +59,8 @@ public class UserSettingsService {
         return "Description " + MS_SUCCESS;
     }
 
-    public String updatePassword(PasswordUpdateRequest passwordUpdateRequest) throws PasswordUpdateException, DatabaseNotFoundException, NoAddDatabaseException {
-        User user = getUser(passwordUpdateRequest.getUser_id());
+    public String updatePassword(PasswordUpdateRequest passwordUpdateRequest) throws PasswordUpdateException, NotFoundDatabaseException, NoAddDatabaseException {
+        User user = userService.getUser(passwordUpdateRequest.getUser_id());
         String oldPass = passwordUpdateRequest.getOldPassword(),
                 newPass = passwordUpdateRequest.getNewPassword(), realPass = user.getPassword();
         if (passwordEncoder.matches(oldPass, realPass) || passwordEncoder.matches(newPass, realPass))
@@ -71,12 +72,6 @@ public class UserSettingsService {
             throw new NoAddDatabaseException(MS_FAILED + " password");
         }
         return "Password " + MS_SUCCESS;
-    }
-
-    private User getUser(Long user_id) throws DatabaseNotFoundException {
-        Optional<User> userOptional = userRepository.findByIdAndUserImageNotNullOrUserImageNull(user_id);
-        if (userOptional.isEmpty()) throw new DatabaseNotFoundException("User not found");
-        return userOptional.get();
     }
 
 }
