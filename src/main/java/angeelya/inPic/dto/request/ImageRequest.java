@@ -1,19 +1,18 @@
 package angeelya.inPic.dto.request;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LogInRequest {
-    @NotNull(message ="Login should be not null" )
-    private String login;
-    @NotNull(message ="Password should be not null" )
-    private String password;
+public class ImageRequest {
+    @Min(value = 1,message = "Image_id should be more than 1")
+    @NotNull(message ="Image_id should be not null")
+    private Long image_id;
 }

@@ -24,6 +24,7 @@ public class RegisterRequest {
     @Size(min = 2, max=200 , message = "Login should be between 2 and 200")
     public String login;
     @NotNull(message ="Email should be not null" )
+    @Size(min = 10, max=250, message = "Email should be more than 10 and less than 250")
     @UniqueEmail
     @EmailContent
     private String email;

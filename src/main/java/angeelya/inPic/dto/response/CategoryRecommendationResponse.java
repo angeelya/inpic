@@ -4,14 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.core.io.Resource;
 
-@Data
 @Builder
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-public class ImageResponse {
-    private Long id;
-    private Resource image;
-    private String name;
+@AllArgsConstructor
+public class CategoryRecommendationResponse {
+    private Long category_id;
+    private String category;
 }
