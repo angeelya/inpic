@@ -10,6 +10,6 @@ public class NameContentValidation implements ConstraintValidator<NameContent,St
 
     @Override
     public boolean isValid(String name, ConstraintValidatorContext constraintValidatorContext) {
-        return name!=null&&name.equals("^[\\dA-z ]+$");
+        return name!=null&&name.matches("^[A-z-_\\s\\d]+$");
     }
 }

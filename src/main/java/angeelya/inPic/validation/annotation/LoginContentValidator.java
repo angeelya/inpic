@@ -10,6 +10,6 @@ public class LoginContentValidator implements ConstraintValidator<LoginContent,S
 
     @Override
     public boolean isValid(String login, ConstraintValidatorContext constraintValidatorContext) {
-        return login!=null&&login.matches("^[\\dA-z]+$");
+        return login!=null&&login.matches("^[\\dA-z_]+$");
     }
 }

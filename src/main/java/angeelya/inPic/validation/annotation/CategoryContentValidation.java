@@ -10,6 +10,6 @@ public class CategoryContentValidation implements ConstraintValidator<CategoryCo
 
     @Override
     public boolean isValid(String category, ConstraintValidatorContext constraintValidatorContext) {
-        return category!=null&&category.matches("^[a-zA-Z ]+$");
+        return category!=null&&category.matches("^[a-zA-Z-_\\s]+$");
     }
 }
