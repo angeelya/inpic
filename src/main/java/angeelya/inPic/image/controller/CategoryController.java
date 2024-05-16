@@ -3,7 +3,7 @@ package angeelya.inPic.image.controller;
 import angeelya.inPic.database.model.Category;
 import angeelya.inPic.dto.request.CategoryAddingRequest;
 import angeelya.inPic.dto.response.MessageResponse;
-import angeelya.inPic.exception_handling.exception.DatabaseNotFoundException;
+import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.ValidationErrorsException;
 import angeelya.inPic.image.service.CategoryService;
@@ -24,7 +24,7 @@ public class CategoryController {
     private final ValidationErrorsService validationErrorsService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Category>> getAllCategories() throws DatabaseNotFoundException {
+    public ResponseEntity<List<Category>> getAllCategories() throws NotFoundDatabaseException {
         return ResponseEntity.ok(categoryService.getAllCategory());
     }
 
