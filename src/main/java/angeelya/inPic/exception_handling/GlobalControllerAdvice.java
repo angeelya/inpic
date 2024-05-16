@@ -13,11 +13,11 @@ public class GlobalControllerAdvice {
     public ResponseEntity handlerExceptionBadRequest(Exception e) {
         return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
     }
-    @ExceptionHandler(DatabaseNotFoundException.class)
-    public ResponseEntity handlerDatabaseNotFoundException(DatabaseNotFoundException e) {
+    @ExceptionHandler(NotFoundDatabaseException.class)
+    public ResponseEntity handlerDatabaseNotFoundException(NotFoundDatabaseException e) {
         return new ResponseEntity(new MessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler({FileException.class, NoAddDatabaseException.class})
+    @ExceptionHandler({FileException.class, NoAddDatabaseException.class,DeleteDatabaseException.class})
     public ResponseEntity handlerException(Exception e) {
         return new ResponseEntity(new MessageResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
