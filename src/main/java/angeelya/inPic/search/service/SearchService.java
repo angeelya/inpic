@@ -6,12 +6,13 @@ import angeelya.inPic.database.model.User;
 import angeelya.inPic.database.repository.ImageRepository;
 import angeelya.inPic.database.repository.SearchRepository;
 import angeelya.inPic.database.repository.UserRepository;
-import angeelya.inPic.exception_handling.exception.DatabaseNotFoundException;
+import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.exception_handling.exception.FileException;
 import angeelya.inPic.file.service.ImageFileService;
 import angeelya.inPic.dto.request.UserInformationRequest;
 import angeelya.inPic.dto.request.SearchImageRequest;
 import angeelya.inPic.dto.response.ImageResponse;
+import angeelya.inPic.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,16 +31,16 @@ public class SearchService {
     private final ImageRepository imageRepository;
     private final ImageFileService imageFileService;
     private final SearchRepository searchRepository;
-    private final UserRepository userRepository;
-    public List<ImageResponse> searchImage(SearchImageRequest searchImageRequest) throws FileException, DatabaseNotFoundException {
+    private final UserService userService;
+    public List<ImageResponse> searchImage(SearchImageRequest searchImageRequest) throws FileException, NotFoundDatabaseException {
         String key = searchImageRequest.getKey();
         saveRequestHistory(key,searchImageRequest.getUser_id());
         List<Image> images = imageRepository.findByNameIsLikeIgnoreCaseOrCategory_CategoryIsLikeIgnoreCaseOrDescriptionIsLikeIgnoreCase(key, key, key);
-        if(images.isEmpty()) throw new DatabaseNotFoundException("No images found");
+        if(images.isEmpty()) throw new NotFoundDatabaseException("No images found");
         List<ImageResponse>imageResponses= images.stream().map(image -> {
             try {
-                return new ImageResponse(image.getId(), imageFileService.getImage(image.getPath(),image.getImgName()), image.getName());
-            } catch (IOException e) {
+                return new ImageResponse(image.getId(), imageFileService.getImage(image.getImgName()), image.getName());
+            } catch (FileException e) {
                 logger.error(e.getMessage());
                 return null;
             }
@@ -48,15 +49,13 @@ public class SearchService {
         return imageResponses;
     }
 
-    private void saveRequestHistory(String text, Long user_id) throws DatabaseNotFoundException {
-        Optional<User> user = userRepository.findByIdAndUserImageNotNullOrUserImageNull(user_id);
-        if(user.isPresent())
-        searchRepository.save(Search.builder().text(text).user(user.get()).build());
-        else throw new DatabaseNotFoundException("User not found");
+    private void saveRequestHistory(String text, Long user_id) throws NotFoundDatabaseException {
+       User user = userService.getUser(user_id);
+        searchRepository.save(Search.builder().text(text).user(user).build());
     }
-    public List<Search> getSearchesHistory(UserInformationRequest userInformationRequest) throws DatabaseNotFoundException {
+    public List<Search> getSearchesHistory(UserInformationRequest userInformationRequest) throws NotFoundDatabaseException {
       List<Search> searches=searchRepository.findByUser_Id(userInformationRequest.getUser_id());
-      if (searches.isEmpty()) throw  new DatabaseNotFoundException("Such search history does not exist");
+      if (searches.isEmpty()) throw  new NotFoundDatabaseException("Such search history does not exist");
       return searches;
     }
 }

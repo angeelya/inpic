@@ -1,8 +1,7 @@
 package angeelya.inPic.search.controller;
 
 import angeelya.inPic.database.model.Search;
-import angeelya.inPic.database.model.User;
-import angeelya.inPic.exception_handling.exception.DatabaseNotFoundException;
+import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.exception_handling.exception.ValidationErrorsException;
 import angeelya.inPic.exception_handling.exception.FileException;
 import angeelya.inPic.validation.service.ValidationErrorsService;
@@ -17,7 +16,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/search")
@@ -26,13 +24,13 @@ public class SearchController {
     private final SearchService searchService;
     private final ValidationErrorsService validationErrorsService;
     @PostMapping("/images")
-    public ResponseEntity<List<ImageResponse>> getImage(@RequestBody @Valid SearchImageRequest searchImageRequest, BindingResult bindingResult) throws ValidationErrorsException, FileException, DatabaseNotFoundException {
+    public ResponseEntity<List<ImageResponse>> getImage(@RequestBody @Valid SearchImageRequest searchImageRequest, BindingResult bindingResult) throws ValidationErrorsException, FileException, NotFoundDatabaseException {
         validationErrorsService.validation(bindingResult);
         return ResponseEntity.ok(searchService.searchImage(searchImageRequest));
     }
 
     @PostMapping("/history")
-    public ResponseEntity<List<Search>> getHistory(@RequestBody @Valid UserInformationRequest userInformationRequest, BindingResult bindingResult) throws ValidationErrorsException, DatabaseNotFoundException {
+    public ResponseEntity<List<Search>> getHistory(@RequestBody @Valid UserInformationRequest userInformationRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException {
         validationErrorsService.validation(bindingResult);
         return ResponseEntity.ok(searchService.getSearchesHistory(userInformationRequest));
     }
