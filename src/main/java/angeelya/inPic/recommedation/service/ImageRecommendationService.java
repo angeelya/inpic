@@ -1,4 +1,4 @@
-package angeelya.inPic.recommedation;
+package angeelya.inPic.recommedation.service;
 
 import angeelya.inPic.database.model.Action;
 import angeelya.inPic.database.model.Recommendation;
@@ -12,6 +12,7 @@ import angeelya.inPic.file.service.ImageFileService;
 import angeelya.inPic.image.service.ImageService;
 import angeelya.inPic.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,9 +28,11 @@ public class ImageRecommendationService {
     private final ImageService imageService;
     private final RecommendationRepository recommendationRepository;
     private final ImageFileService imageFileService;
-    private final Double MIN_RECOMMEND_GRADE=0.5;
+    private final ActionService actionService;
+    private final Double MIN_RECOMMEND_GRADE = 0.5;
 
-    public void recommend(List<Action> actions, Long user_id) throws NotFoundDatabaseException, NoAddDatabaseException {
+    public void recommend(Long user_id) throws NotFoundDatabaseException, NoAddDatabaseException {
+        List<Action> actions = actionService.getAllActions();
         Map<Long, Double> recommendationMap = slopeOne.beginSlopeOne(makeData(actions), user_id);
         List<Recommendation> recommendations = makeRecommendations(recommendationMap, user_id);
         saveRecommendations(recommendations);
@@ -48,12 +51,18 @@ public class ImageRecommendationService {
 
     private List<Recommendation> findRecommendations(Long user_id) throws NotFoundDatabaseException {
         userService.getUser(user_id);
-        return recommendationRepository.findByUser_IdAndGradeGreaterThanEqual(user_id,MIN_RECOMMEND_GRADE);
+        List<Recommendation> recommendations = recommendationRepository.findByUser_IdAndGradeGreaterThanEqual(user_id, MIN_RECOMMEND_GRADE);
+        if (recommendations.isEmpty()) throw new NotFoundDatabaseException("No images recommendation found");
+        return recommendations;
     }
 
     private void saveRecommendations(List<Recommendation> recommendations) throws NoAddDatabaseException {
-        recommendations = recommendationRepository.saveAll(recommendations);
-        if (recommendations.isEmpty()) throw new NoAddDatabaseException("Recommendation adding is failed");
+        try {
+            recommendations = recommendationRepository.saveAll(recommendations);
+            if (recommendations.isEmpty()) throw new NoAddDatabaseException("Recommendation adding is failed");
+        } catch (DataAccessException e) {
+            throw new NoAddDatabaseException("Failed to save");
+        }
     }
 
     private List<Recommendation> makeRecommendations(Map<Long, Double> recommendationMap, Long user_id) throws NotFoundDatabaseException {

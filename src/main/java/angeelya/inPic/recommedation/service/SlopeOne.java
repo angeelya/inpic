@@ -1,4 +1,4 @@
-package angeelya.inPic.recommedation;
+package angeelya.inPic.recommedation.service;
 
 import org.springframework.stereotype.Component;
 
