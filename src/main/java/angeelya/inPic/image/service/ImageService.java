@@ -11,11 +11,13 @@ import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.exception_handling.exception.FileException;
 import angeelya.inPic.file.service.ImageFileService;
+import angeelya.inPic.recommedation.service.ActionService;
 import angeelya.inPic.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +36,7 @@ public class ImageService {
     private final CategoryService categoryService;
     private final AlbumService albumService;
     private final String MS_NOT_FOUND = "not found";
+    private final ActionService actionService;
 
     public List<ImageResponse> getLikedImage(UserInformationRequest userInformationRequest) throws FileException, NotFoundDatabaseException {
         List<Image> images = imageRepository.findByLike_User_Id(userInformationRequest.getUser_id());
@@ -48,6 +51,7 @@ public class ImageService {
     public ImagePageResponse getImageData(ImagePageRequest imagePageRequest) throws NotFoundDatabaseException, FileException {
         Image image = getImage(imagePageRequest.getImage_id());
         UserImage userImage = image.getUser().getUserImage();
+        actionService.setGrade(image.getId(), imagePageRequest.getUser_id(),true);
         return ImagePageResponse.builder().
                 user_id(image.getUser().getId()).
                 imgName(image.getName()).
@@ -69,15 +73,22 @@ public class ImageService {
                 .imgName(multipartFile.getOriginalFilename())
                 .path(imageFileService.getDirectoryPath()).build();
         if (imageAddRequest.getAlbum_id() != null) image = getAlbumsIntoImage(image, imageAddRequest.getAlbum_id());
-        image = imageRepository.save(image);
-        if (image == null) throw new NoAddDatabaseException("Failed to add image");
+        saveImage(image);
         return "Album adding is successful";
     }
 
     public Image getImage(Long image_id) throws NotFoundDatabaseException {
         Optional<Image> image = imageRepository.findById(image_id);
-        if (image.isEmpty()) throw new NotFoundDatabaseException("Image data"+MS_NOT_FOUND);
+        if (image.isEmpty()) throw new NotFoundDatabaseException("Image data" + MS_NOT_FOUND);
         return image.get();
+    }
+
+    private void saveImage(Image image) throws NoAddDatabaseException {
+        try {
+            imageRepository.save(image);
+        } catch (DataAccessException e) {
+            throw new NoAddDatabaseException("Failed to save image");
+        }
     }
 
     private Image getAlbumsIntoImage(Image image, Long album_id) throws NotFoundDatabaseException {
@@ -85,6 +96,4 @@ public class ImageService {
         image.setAlbums(albums);
         return image;
     }
-
-
 }
