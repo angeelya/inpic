@@ -15,4 +15,7 @@ public class ImagePageRequest {
     @Min(value = 1,message = "Image_id should be more than 1")
     @NotNull(message ="Image_id should be not null" )
     private Long image_id;
+    @Min(value = 1,message = "User_id should be more than 1")
+    @NotNull(message ="User_id should be not null" )
+    private Long user_id;
 }
