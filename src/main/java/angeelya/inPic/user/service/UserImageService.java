@@ -24,7 +24,7 @@ public class UserImageService {
         if(userImage==null) return null;
         try {
             return imageFileService.getImage(userImage.getName());
-        } catch (IOException | FileException e) {
+        } catch (FileException e) {
             logger.error(this.getClass().getSimpleName()+": "+e.getMessage());
              return null;
         }
