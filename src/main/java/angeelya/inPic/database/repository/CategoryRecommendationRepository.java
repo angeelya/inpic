@@ -10,5 +10,6 @@ import java.util.List;
 public interface CategoryRecommendationRepository extends CrudRepository<CategoryRecommendation,Long> {
     List<CategoryRecommendation> saveAll( List<CategoryRecommendation> categoryRecommendations);
     List<CategoryRecommendation> findByUser_IdAndGradeGreaterThanEqual(Long user_id,Double minGrade);
+    List<CategoryRecommendation> findByGradeGreaterThanEqual(Double minGrade);
 
 }
