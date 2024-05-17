@@ -1,6 +1,7 @@
 package angeelya.inPic.search.controller;
 
 import angeelya.inPic.database.model.Search;
+import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.exception_handling.exception.ValidationErrorsException;
 import angeelya.inPic.exception_handling.exception.FileException;
@@ -24,7 +25,7 @@ public class SearchController {
     private final SearchService searchService;
     private final ValidationErrorsService validationErrorsService;
     @PostMapping("/images")
-    public ResponseEntity<List<ImageResponse>> getImage(@RequestBody @Valid SearchImageRequest searchImageRequest, BindingResult bindingResult) throws ValidationErrorsException, FileException, NotFoundDatabaseException {
+    public ResponseEntity<List<ImageResponse>> getImage(@RequestBody @Valid SearchImageRequest searchImageRequest, BindingResult bindingResult) throws ValidationErrorsException, FileException, NotFoundDatabaseException, NoAddDatabaseException {
         validationErrorsService.validation(bindingResult);
         return ResponseEntity.ok(searchService.searchImage(searchImageRequest));
     }
