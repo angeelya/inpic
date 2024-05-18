@@ -6,12 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.core.io.Resource;
 
-@Data
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageResponse {
+public class ImageResourceResponse {
     private Long image_id;
     private Resource image;
-    private String name;
 }

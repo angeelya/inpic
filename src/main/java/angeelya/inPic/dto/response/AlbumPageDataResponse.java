@@ -4,14 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.core.io.Resource;
 
-@Data
+import java.util.List;
+
 @Builder
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-public class ImageResponse {
-    private Long image_id;
-    private Resource image;
+@AllArgsConstructor
+public class AlbumPageDataResponse {
+    private Long album_id;
     private String name;
+    private List<ImageResourceResponse> imageResourceResponses;
 }

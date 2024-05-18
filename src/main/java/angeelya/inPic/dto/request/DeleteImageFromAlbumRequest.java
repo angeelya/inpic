@@ -11,7 +11,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlbumDeleteRequest {
+public class DeleteImageFromAlbumRequest {
+    @Min(value = 1,message = "Image_id should be more than 1")
+    @NotNull(message ="Image_id should be not null")
+    private Long image_id;
     @Min(value = 1,message = "Album_id should be more than 1")
     @NotNull(message ="Album_id should be not null")
     private Long album_id;
