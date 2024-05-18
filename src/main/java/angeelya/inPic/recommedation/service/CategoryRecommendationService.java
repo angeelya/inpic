@@ -2,6 +2,7 @@ package angeelya.inPic.recommedation.service;
 
 import angeelya.inPic.database.model.Action;
 import angeelya.inPic.database.model.CategoryRecommendation;
+import angeelya.inPic.database.model.Recommendation;
 import angeelya.inPic.database.repository.CategoryRecommendationRepository;
 import angeelya.inPic.dto.request.UserInformationRequest;
 import angeelya.inPic.dto.response.CategoryRecommendationResponse;
@@ -33,6 +34,7 @@ public class CategoryRecommendationService {
         List<Action> actions = actionService.getAllActions();
         Map<Long, Double> recommendationsMap = slopeOne.beginSlopeOne(makeData(actions), user_id);
         List<CategoryRecommendation> categoryRecommendations = makeRecommendations(recommendationsMap, user_id);
+        writeRecommendation(categoryRecommendations);
         saveRecommendations(categoryRecommendations);
     }
 
@@ -68,6 +70,33 @@ public class CategoryRecommendationService {
             if (recommendations.isEmpty()) throw new NoAddDatabaseException("Recommendation adding is failed");
         } catch (DataAccessException e) {
             throw new NoAddDatabaseException("Failed to save");
+        }
+    }
+    private void writeRecommendation(List<CategoryRecommendation> recommendations) throws NoAddDatabaseException {
+        saveRecommendations(recommendations.stream().filter(recommendation -> {
+            CategoryRecommendation recommendationSearch = categoryRecommendationRepository.findByUser_IdAndCategory_Id(recommendation.getUser().getId(), recommendation.getCategory().getId());
+            return recommendationSearch != null ? false : true;
+        }).collect(Collectors.toList()));
+        updateRecommendation(recommendations.stream().filter(recommendation -> {
+            CategoryRecommendation recommendationSearch = categoryRecommendationRepository.findByUser_IdAndCategory_Id(recommendation.getUser().getId(), recommendation.getCategory().getId());
+            return recommendationSearch != null ? true : false;
+        }).collect(Collectors.toList()));
+    }
+
+    private void updateRecommendation(List<CategoryRecommendation> recommendations) throws NoAddDatabaseException {
+        for (CategoryRecommendation recommendation : recommendations) {
+            CategoryRecommendation recommendationUpdate = categoryRecommendationRepository.findByUser_IdAndCategory_Id(recommendation.getUser().getId(), recommendation.getCategory().getId());
+            recommendationUpdate.setGrade(recommendation.getGrade());
+            recommendationUpdate=saveRecommendation(recommendationUpdate);
+            if(!recommendationUpdate.getGrade().equals(recommendation.getGrade())) throw new NoAddDatabaseException("Failed to update category recommendation");
+        }
+    }
+
+    private CategoryRecommendation saveRecommendation(CategoryRecommendation recommendationUpdate) throws NoAddDatabaseException {
+        try {
+            return categoryRecommendationRepository.save(recommendationUpdate);
+        } catch (DataAccessException e) {
+            throw new NoAddDatabaseException("Failed to save category recommendation");
         }
     }
 

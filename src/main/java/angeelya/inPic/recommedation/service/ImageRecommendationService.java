@@ -35,8 +35,9 @@ public class ImageRecommendationService {
         List<Action> actions = actionService.getAllActions();
         Map<Long, Double> recommendationMap = slopeOne.beginSlopeOne(makeData(actions), user_id);
         List<Recommendation> recommendations = makeRecommendations(recommendationMap, user_id);
-        saveRecommendations(recommendations);
+        writeRecommendation(recommendations);
     }
+
 
     public List<ImageRecommendationResponse> getRecommendations(UserInformationRequest userInformationRequest) throws NotFoundDatabaseException, FileException {
         List<Recommendation> recommendations = findRecommendations(userInformationRequest.getUser_id());
@@ -55,13 +56,40 @@ public class ImageRecommendationService {
         if (recommendations.isEmpty()) throw new NotFoundDatabaseException("No images recommendation found");
         return recommendations;
     }
+    private void writeRecommendation(List<Recommendation> recommendations) throws NoAddDatabaseException {
+        saveRecommendations(recommendations.stream().filter(recommendation -> {
+            Recommendation recommendationSearch = recommendationRepository.findByUser_IdAndImage_Id(recommendation.getUser().getId(), recommendation.getImage().getId());
+            return recommendationSearch != null ? false : true;
+        }).collect(Collectors.toList()));
+        updateRecommendation(recommendations.stream().filter(recommendation -> {
+            Recommendation recommendationSearch = recommendationRepository.findByUser_IdAndImage_Id(recommendation.getUser().getId(), recommendation.getImage().getId());
+            return recommendationSearch != null ? true : false;
+        }).collect(Collectors.toList()));
+    }
+
+    private void updateRecommendation(List<Recommendation> recommendations) throws NoAddDatabaseException {
+        for (Recommendation recommendation : recommendations) {
+            Recommendation recommendationUpdate = recommendationRepository.findByUser_IdAndImage_Id(recommendation.getUser().getId(), recommendation.getImage().getId());
+            recommendationUpdate.setGrade(recommendation.getGrade());
+            recommendationUpdate=saveRecommendation(recommendationUpdate);
+            if(!recommendationUpdate.getGrade().equals(recommendation.getGrade())) throw new NoAddDatabaseException("Failed to update recommendation");
+        }
+    }
+
+    private Recommendation saveRecommendation(Recommendation recommendation) throws NoAddDatabaseException {
+        try {
+            return recommendationRepository.save(recommendation);
+        } catch (DataAccessException e) {
+            throw new NoAddDatabaseException("Failed to save recommendation");
+        }
+    }
 
     private void saveRecommendations(List<Recommendation> recommendations) throws NoAddDatabaseException {
         try {
             recommendations = recommendationRepository.saveAll(recommendations);
             if (recommendations.isEmpty()) throw new NoAddDatabaseException("Recommendation adding is failed");
         } catch (DataAccessException e) {
-            throw new NoAddDatabaseException("Failed to save");
+            throw new NoAddDatabaseException("Failed to save recommendations");
         }
     }
 
