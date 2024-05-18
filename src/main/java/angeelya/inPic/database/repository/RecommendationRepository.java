@@ -13,4 +13,5 @@ public interface RecommendationRepository extends CrudRepository<Recommendation,
     List<Recommendation> saveAll(List<Recommendation> list);
 
     List<Recommendation> findByUser_IdAndGradeGreaterThanEqual(Long user_id,Double minGrade);
+    Recommendation findByUser_IdAndImage_Id(Long user_id, Long image_id);
 }

@@ -1,4 +1,5 @@
 package angeelya.inPic.database.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +29,7 @@ public class Image {
     @JoinColumn(name = "category_id")
     @ManyToOne(optional = false,cascade = CascadeType.ALL)
     private Category category;
+    @JsonIgnore
     @ManyToMany(mappedBy = "images")
     private List<Album> albums;
     @OneToMany(mappedBy = "image")
