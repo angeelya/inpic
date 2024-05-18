@@ -1,15 +1,11 @@
 package angeelya.inPic.image.controller;
 
 import angeelya.inPic.database.model.Album;
-import angeelya.inPic.dto.request.AlbumDeleteRequest;
-import angeelya.inPic.dto.request.AlbumRequest;
-import angeelya.inPic.dto.request.AlbumUpdateRequest;
-import angeelya.inPic.dto.request.UserInformationRequest;
+import angeelya.inPic.dto.request.*;
+import angeelya.inPic.dto.response.AlbumPageDataResponse;
 import angeelya.inPic.dto.response.MessageResponse;
-import angeelya.inPic.exception_handling.exception.DeleteDatabaseException;
-import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
-import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
-import angeelya.inPic.exception_handling.exception.ValidationErrorsException;
+import angeelya.inPic.dto.response.UserAlbumResponse;
+import angeelya.inPic.exception_handling.exception.*;
 import angeelya.inPic.image.service.AlbumService;
 import angeelya.inPic.validation.service.ValidationErrorsService;
 import jakarta.validation.Valid;
@@ -35,18 +31,33 @@ public class AlbumController {
         return ResponseEntity.ok(albumService.getAllUserAlbum(userInformationRequest));
     }
     @PostMapping("/add")
-    public ResponseEntity<MessageResponse> addAlbum(@RequestBody @Valid AlbumRequest albumRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException {
+    public ResponseEntity<MessageResponse> addAlbum(@RequestBody @Valid AlbumAddRequest albumAddRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException {
         validationErrorsService.validation(bindingResult);
-        return ResponseEntity.ok(new MessageResponse(albumService.addAlbum(albumRequest)));
+        return ResponseEntity.ok(new MessageResponse(albumService.addAlbum(albumAddRequest)));
     }
     @PostMapping("/update")
     public ResponseEntity<MessageResponse> updateAlbumData(@RequestBody @Valid AlbumUpdateRequest albumUpdateRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException {
         validationErrorsService.validation(bindingResult);
         return ResponseEntity.ok(new MessageResponse(albumService.updateAlbumData(albumUpdateRequest)));
     }
-    @PostMapping("/delete")
-    public ResponseEntity<MessageResponse> deleteAlbum(@RequestBody @Valid AlbumDeleteRequest albumDeleteRequest, BindingResult bindingResult) throws ValidationErrorsException, DeleteDatabaseException {
+    @PostMapping("/delete/image")
+    public ResponseEntity<MessageResponse> deleteImageFromAlbum(@RequestBody @Valid DeleteImageFromAlbumRequest deleteImageFromAlbumRequest, BindingResult bindingResult) throws NotFoundDatabaseException, NoAddDatabaseException, ValidationErrorsException {
         validationErrorsService.validation(bindingResult);
-        return ResponseEntity.ok(new MessageResponse(albumService.deleteAlbum(albumDeleteRequest)));
+        return ResponseEntity.ok(new MessageResponse(albumService.deleteImageFromAlbum(deleteImageFromAlbumRequest)));
+    }
+    @PostMapping("/page/data")
+    public ResponseEntity<AlbumPageDataResponse> getPageData(@RequestBody @Valid AlbumRequest albumRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, FileException {
+        validationErrorsService.validation(bindingResult);
+        return ResponseEntity.ok(albumService.getAlbumPageData(albumRequest));
+    }
+    @PostMapping("/all/by/user/with/image")
+    public ResponseEntity<List<UserAlbumResponse>> getUserAlbumsWithImage(@RequestBody @Valid UserInformationRequest userInformationRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, FileException {
+        validationErrorsService.validation(bindingResult);
+        return ResponseEntity.ok(albumService.getUserAlbums(userInformationRequest));
+    }
+    @PostMapping("/delete")
+    public ResponseEntity<MessageResponse> deleteAlbum(@RequestBody @Valid AlbumRequest albumRequest, BindingResult bindingResult) throws ValidationErrorsException, DeleteDatabaseException {
+        validationErrorsService.validation(bindingResult);
+        return ResponseEntity.ok(new MessageResponse(albumService.deleteAlbum(albumRequest)));
     }
 }
