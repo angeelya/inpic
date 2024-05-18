@@ -33,8 +33,7 @@ public class CommentService {
     private final ActionService actionService;
     private final String MS_FAILED_DELETE = "Failed to delete comment", MS_FAILED_ADD = "Failed to add comment",
             MS_NOT_FOUND = "Comment not found", MS_SUCCESS_DELETE = "Comment deleting is successful", MS_NOT_FOUND_LIST = "No comments found",
-            MS_SUCCESS_ADD = "Comment adding is successful", MS_FORBIDDEN = "User cannot delete  other user comment",
-    MS_FAILED_UPDATE="Failed to update comment", MS_SUCCESS_UPDATE="Comment updating is successful";
+            MS_SUCCESS_ADD = "Comment adding is successful", MS_FAILED_UPDATE="Failed to update comment", MS_SUCCESS_UPDATE="Comment updating is successful";
 
     public String addComment(CommentAddRequest commentAddRequest) throws NoAddDatabaseException, NotFoundDatabaseException {
         Image image = imageService.getImage(commentAddRequest.getImage_id());
@@ -56,10 +55,8 @@ public class CommentService {
         ).collect(Collectors.toList());
     }
 
-    public String deleteComment(CommentDeleteRequest commentDeleteRequest) throws NotFoundDatabaseException, ForbiddenRequestException, DeleteDatabaseException {
+    public String deleteComment(CommentDeleteRequest commentDeleteRequest) throws NotFoundDatabaseException, DeleteDatabaseException {
         Comment comment = getComment(commentDeleteRequest.getUser_id(), commentDeleteRequest.getImage_id());
-        if (!comment.getUser().equals(commentDeleteRequest.getUser_id()))
-            throw new ForbiddenRequestException(MS_FORBIDDEN);
         delete(comment.getId());
         comment = getComment(commentDeleteRequest.getUser_id(), commentDeleteRequest.getImage_id());
         if (comment != null) throw new DeleteDatabaseException(MS_FAILED_DELETE);
