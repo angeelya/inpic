@@ -1,12 +1,9 @@
 package angeelya.inPic.like.service;
 
-import angeelya.inPic.database.model.Album;
 import angeelya.inPic.database.model.Image;
 import angeelya.inPic.database.model.Like;
 import angeelya.inPic.database.model.User;
-import angeelya.inPic.database.repository.ImageRepository;
 import angeelya.inPic.database.repository.LikeRepository;
-import angeelya.inPic.dto.request.AlbumDeleteRequest;
 import angeelya.inPic.dto.request.LikeRequest;
 import angeelya.inPic.exception_handling.exception.DeleteDatabaseException;
 import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
