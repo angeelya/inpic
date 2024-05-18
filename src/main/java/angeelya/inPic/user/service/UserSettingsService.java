@@ -1,11 +1,9 @@
 package angeelya.inPic.user.service;
 
 import angeelya.inPic.database.model.User;
+import angeelya.inPic.database.model.UserImage;
 import angeelya.inPic.database.repository.UserRepository;
-import angeelya.inPic.dto.request.DescriptionUpdateRequest;
-import angeelya.inPic.dto.request.EmailUpdateRequest;
-import angeelya.inPic.dto.request.NameUpdateRequest;
-import angeelya.inPic.dto.request.PasswordUpdateRequest;
+import angeelya.inPic.dto.request.*;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.PasswordUpdateException;
@@ -15,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +21,7 @@ public class UserSettingsService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final UserRepository userRepository;
     private final UserService userService;
+    private final UserImageService userImageService;
     private final PasswordEncoder passwordEncoder;
     private final String MS_SUCCESS = "updating is successful", MS_FAILED = "Failed to update", MS_FAILED_ADD = "Failed to add to BD", MS_FAILED_SAVE = "Failed to save user";
 
@@ -73,10 +73,19 @@ public class UserSettingsService {
         return "Password " + MS_SUCCESS;
     }
 
+    public String updateUserImage(MultipartFile multipartFile, UserInformationRequest userInformationRequest) throws NotFoundDatabaseException, NoAddDatabaseException {
+        User user = userService.getUser(userInformationRequest.getUser_id());
+        UserImage userImage = user.getUserImage();
+        if (user == null) userImage = UserImage.builder().user(user).build();
+        userImage.setName(multipartFile.getOriginalFilename());
+        userImage = userImageService.addUserImage(userImage, multipartFile);
+        if (!userImage.getUser().equals(user)) throw new NoAddDatabaseException(MS_FAILED + " user image");
+        return "User image " + MS_SUCCESS;
+    }
+
     private User saveUser(User user) throws NoAddDatabaseException {
         try {
-            user = userRepository.save(user);
-            return user;
+            return userRepository.save(user);
         } catch (DataAccessException e) {
             throw new NoAddDatabaseException(MS_FAILED);
         }

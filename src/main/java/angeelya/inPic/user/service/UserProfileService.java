@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserProfileService {
     private final UserImageService userImageService;
-    private final UserRepository userRepository;
     private final UserService userService;
     public UserDataForProfileResponse getUserData(UserInformationRequest userInformationRequest) throws NotFoundDatabaseException {
         User user = userService.getUser(userInformationRequest.getUser_id());

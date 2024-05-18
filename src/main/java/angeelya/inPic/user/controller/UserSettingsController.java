@@ -1,9 +1,6 @@
 package angeelya.inPic.user.controller;
 
-import angeelya.inPic.dto.request.DescriptionUpdateRequest;
-import angeelya.inPic.dto.request.EmailUpdateRequest;
-import angeelya.inPic.dto.request.NameUpdateRequest;
-import angeelya.inPic.dto.request.PasswordUpdateRequest;
+import angeelya.inPic.dto.request.*;
 import angeelya.inPic.dto.response.MessageResponse;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
@@ -15,10 +12,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/settings")
@@ -46,8 +41,14 @@ public class UserSettingsController {
     }
 
     @PostMapping("/update/password")
-    public ResponseEntity<MessageResponse> updatePassword(@RequestBody @Valid PasswordUpdateRequest passwordUpdateRequest,BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException, PasswordUpdateException {
+    public ResponseEntity<MessageResponse> updatePassword(@RequestBody @Valid PasswordUpdateRequest passwordUpdateRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException, PasswordUpdateException {
         validationErrorsService.validation(bindingResult);
         return ResponseEntity.ok(new MessageResponse(userSettingsService.updatePassword(passwordUpdateRequest)));
+    }
+
+    @PostMapping("/update/image")
+    public ResponseEntity<MessageResponse> updateImage(@RequestBody @Valid UserInformationRequest userInformationRequest, BindingResult bindingResult, @RequestParam("file") MultipartFile multipartFile) throws ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException {
+        validationErrorsService.validation(bindingResult);
+        return ResponseEntity.ok(new MessageResponse(userSettingsService.updateUserImage(multipartFile,userInformationRequest)));
     }
 }
