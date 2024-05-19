@@ -1,6 +1,5 @@
 package angeelya.inPic.file.service;
 
-import angeelya.inPic.database.model.Image;
 import angeelya.inPic.exception_handling.exception.FileException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +20,8 @@ public class ImageFileService {
     private final Path path = Paths.get("image");
     private File directory;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final String MS_FAILED_SAVE = "Failed to save images", MS_FAILED_GET = "Failed to get image";
-
+    private final String MS_FAILED_SAVE = "Failed to save image file", MS_FAILED_GET = "Failed to get image file",
+            MS_FAILED_DELETE="Failed to delete image file";
     ImageFileService() {
         directory = new File(path.toString());
         if (!directory.exists()) {
@@ -49,6 +48,16 @@ public class ImageFileService {
         } catch (MalformedURLException | FileException e) {
             logger.error(e.getMessage());
             throw new FileException(MS_FAILED_GET);
+        }
+    }
+
+    public void deleteImage(String imgName) throws FileException {
+        try {
+            Files.delete(Path.of(path + "/" + imgName));
+        } catch (IOException e)
+        {
+            logger.error(e.getMessage());
+            throw new FileException(MS_FAILED_DELETE);
         }
     }
 
