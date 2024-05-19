@@ -9,6 +9,7 @@ import angeelya.inPic.exception_handling.exception.DeleteDatabaseException;
 import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.image.service.ImageService;
+import angeelya.inPic.notification.service.LikeNotificationService;
 import angeelya.inPic.recommedation.service.ActionService;
 import angeelya.inPic.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class LikeService {
     private final ImageService imageService;
     private final UserService userService;
     private final ActionService actionService;
+    private final LikeNotificationService likeNotificationService;
     private final String MS_FAILED_DELETE = "Failed to delete like", MS_FAILED_ADD = "Failed to add like",
             MS_SUCCESSFUL_ADD = "Like adding is successful", MS_SUCCESSFUL_DELETE = "Like deleting is successful";
 
@@ -32,19 +34,20 @@ public class LikeService {
         Image image = imageService.getImage(likeRequest.getImage_id());
         User user = userService.getUser(likeRequest.getUser_id());
         try {
-            likeRepository.save(Like.builder().user(user).image(image).build());
+            Like like =likeRepository.save(Like.builder().user(user).image(image).build());
+            likeNotificationService.addNotification(like);
             actionService.setGrade(likeRequest.getUser_id(), likeRequest.getImage_id(), true);
             return MS_SUCCESSFUL_ADD;
         } catch (DataAccessException e) {
             throw new NoAddDatabaseException(MS_FAILED_ADD);
         }
     }
-    public String deleteLike(LikeRequest likeRequest) throws DeleteDatabaseException, NotFoundDatabaseException {
+    public String deleteLike(LikeRequest likeRequest) throws DeleteDatabaseException, NotFoundDatabaseException, NoAddDatabaseException {
         delete(likeRequest.getUser_id(), likeRequest.getImage_id());
         Optional<Like> like = likeRepository.findByUser_IdAndImage_Id(likeRequest.getUser_id(), likeRequest.getImage_id());
         if (like.isPresent()) throw new DeleteDatabaseException(MS_FAILED_DELETE);
         actionService.setGrade(likeRequest.getUser_id(), likeRequest.getImage_id(), false);
-        return MS_FAILED_DELETE;
+        return MS_SUCCESSFUL_DELETE;
     }
 
     private void delete(Long user_id, Long image_id) throws DeleteDatabaseException {
