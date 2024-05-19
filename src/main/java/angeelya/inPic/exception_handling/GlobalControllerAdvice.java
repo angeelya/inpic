@@ -1,5 +1,6 @@
 package angeelya.inPic.exception_handling;
 
+import angeelya.inPic.dto.exception_handling.exception.*;
 import angeelya.inPic.dto.response.MessageResponse;
 import angeelya.inPic.exception_handling.exception.*;
 import org.springframework.http.HttpStatus;
