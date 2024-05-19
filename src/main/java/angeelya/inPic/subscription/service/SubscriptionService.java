@@ -12,6 +12,7 @@ import angeelya.inPic.exception_handling.exception.FileException;
 import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.file.service.ImageFileService;
+import angeelya.inPic.notification.service.SubscriptionNotificationService;
 import angeelya.inPic.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -28,14 +29,16 @@ public class SubscriptionService {
     private final FriendRepository friendRepository;
     private final UserService userService;
     private final ImageFileService imageFileService;
+    private final SubscriptionNotificationService subscriptionNotificationService;
 
     public String addFriend(FriendAddRequest friendAddRequest) throws NotFoundDatabaseException, NoAddDatabaseException {
         User user = userService.getUser(friendAddRequest.getUser_id()),
                 friend = userService.getUser(friendAddRequest.getFriend_id());
         try {
-            friendRepository.save(Friend.builder().
+           Friend subFriend= friendRepository.save(Friend.builder().
                     user(user)
                     .subFriend(friend).build());
+            subscriptionNotificationService.addNotification(subFriend);
         } catch (DataAccessException e) {
             throw new NoAddDatabaseException("Failed to add friend");
         }
