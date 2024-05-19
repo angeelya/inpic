@@ -1,7 +1,6 @@
 package angeelya.inPic.user.service;
 
 import angeelya.inPic.database.model.User;
-import angeelya.inPic.database.repository.UserRepository;
 import angeelya.inPic.dto.request.UserInformationRequest;
 import angeelya.inPic.dto.response.UserDataForProfileResponse;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
