@@ -2,13 +2,13 @@ package angeelya.inPic.image.service;
 
 import angeelya.inPic.database.model.*;
 import angeelya.inPic.database.repository.ImageRepository;
-import angeelya.inPic.dto.request.ImageAddRequest;
-import angeelya.inPic.dto.request.ImageUpdateRequest;
-import angeelya.inPic.dto.request.ImagePageRequest;
-import angeelya.inPic.dto.request.UserInformationRequest;
+import angeelya.inPic.exception_handling.exception.FileException;
+import angeelya.inPic.exception_handling.exception.ForbiddenRequestException;
+import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
+import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
+import angeelya.inPic.dto.request.*;
 import angeelya.inPic.dto.response.ImagePageResponse;
 import angeelya.inPic.dto.response.ImageResponse;
-import angeelya.inPic.exception_handling.exception.*;
 import angeelya.inPic.file.service.ImageFileService;
 import angeelya.inPic.recommedation.service.ActionService;
 import angeelya.inPic.user.service.UserService;
@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.data.relational.core.sql.StatementBuilder.delete;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +48,7 @@ public class ImageService {
         return imageResponses;
     }
 
-    public ImagePageResponse getImageData(ImagePageRequest imagePageRequest) throws NotFoundDatabaseException, FileException {
+    public ImagePageResponse getImageData(ImagePageRequest imagePageRequest) throws NotFoundDatabaseException, FileException, NoAddDatabaseException {
         Image image = getImage(imagePageRequest.getImage_id());
         UserImage userImage = image.getUser().getUserImage();
         actionService.setGrade(image.getId(), imagePageRequest.getUser_id(), true);
