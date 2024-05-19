@@ -1,5 +1,6 @@
-package angeelya.inPic.comment;
+package angeelya.inPic.comment.controller;
 
+import angeelya.inPic.comment.service.CommentService;
 import angeelya.inPic.dto.request.CommentAddRequest;
 import angeelya.inPic.dto.request.CommentDeleteRequest;
 import angeelya.inPic.dto.request.ImageRequest;

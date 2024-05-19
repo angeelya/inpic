@@ -1,4 +1,4 @@
-package angeelya.inPic.comment;
+package angeelya.inPic.comment.service;
 
 import angeelya.inPic.database.model.Comment;
 import angeelya.inPic.database.model.Image;
@@ -57,7 +57,7 @@ public class CommentService {
         ).collect(Collectors.toList());
     }
 
-    public String deleteComment(CommentDeleteRequest commentDeleteRequest) throws NotFoundDatabaseException, DeleteDatabaseException {
+    public String deleteComment(CommentDeleteRequest commentDeleteRequest) throws NotFoundDatabaseException, DeleteDatabaseException, NoAddDatabaseException {
         Comment comment = getComment(commentDeleteRequest.getUser_id(), commentDeleteRequest.getImage_id());
         delete(comment.getId());
         comment = getComment(commentDeleteRequest.getUser_id(), commentDeleteRequest.getImage_id());
