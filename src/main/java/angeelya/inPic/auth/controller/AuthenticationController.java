@@ -2,7 +2,6 @@ package angeelya.inPic.auth.controller;
 
 import angeelya.inPic.dto.response.JwtTokenResponse;
 import angeelya.inPic.dto.request.LogInRequest;
-import angeelya.inPic.dto.response.MessageResponse;
 import angeelya.inPic.dto.request.RegisterRequest;
 import angeelya.inPic.exception_handling.exception.AuthException;
 import angeelya.inPic.auth.service.AuthenticationService;

@@ -2,6 +2,7 @@ package angeelya.inPic.auth.config;
 
 import angeelya.inPic.auth.service.JwtFilter;
 import angeelya.inPic.auth.service.UserService;
+import angeelya.inPic.database.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,15 +26,29 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig {
     private final JwtFilter jwtFilter;
     private final UserService userService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request.requestMatchers("/auth/register",
                                 "/auth/login",
-                                "/search/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**")
-                        .permitAll().anyRequest().authenticated())
+                        .permitAll()
+                        .requestMatchers("/admin/**").hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers("/notification/**",
+                                "/comment/**",
+                                "/like/**",
+                                "/album/**",
+                                "/category/**",
+                                "/image/**",
+                                "/recommend/**",
+                                "/search/**",
+                                "/friend/**",
+                                "/user/profile/**",
+                                "/settings/**").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
+                        .anyRequest()
+                        .authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
                         jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -52,6 +67,7 @@ public class SecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
             throws Exception {
