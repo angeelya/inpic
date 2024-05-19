@@ -5,7 +5,6 @@ import angeelya.inPic.database.model.Search;
 import angeelya.inPic.database.model.User;
 import angeelya.inPic.database.repository.ImageRepository;
 import angeelya.inPic.database.repository.SearchRepository;
-import angeelya.inPic.database.repository.UserRepository;
 import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.exception_handling.exception.FileException;
@@ -20,10 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
