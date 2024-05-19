@@ -9,10 +9,10 @@ import angeelya.inPic.dto.request.CommentDeleteRequest;
 import angeelya.inPic.dto.response.CommentResponse;
 import angeelya.inPic.dto.request.ImageRequest;
 import angeelya.inPic.exception_handling.exception.DeleteDatabaseException;
-import angeelya.inPic.exception_handling.exception.ForbiddenRequestException;
 import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.image.service.ImageService;
+import angeelya.inPic.notification.service.CommentNotificationService;
 import angeelya.inPic.recommedation.service.ActionService;
 import angeelya.inPic.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +31,7 @@ public class CommentService {
     private final UserService userService;
     private final ImageService imageService;
     private final ActionService actionService;
+    private final CommentNotificationService commentNotificationService;
     private final String MS_FAILED_DELETE = "Failed to delete comment", MS_FAILED_ADD = "Failed to add comment",
             MS_NOT_FOUND = "Comment not found", MS_SUCCESS_DELETE = "Comment deleting is successful", MS_NOT_FOUND_LIST = "No comments found",
             MS_SUCCESS_ADD = "Comment adding is successful", MS_FAILED_UPDATE="Failed to update comment", MS_SUCCESS_UPDATE="Comment updating is successful";
@@ -38,11 +39,12 @@ public class CommentService {
     public String addComment(CommentAddRequest commentAddRequest) throws NoAddDatabaseException, NotFoundDatabaseException {
         Image image = imageService.getImage(commentAddRequest.getImage_id());
         User user = userService.getUser(commentAddRequest.getUser_id());
-        saveComment(Comment.builder()
+        Comment comment=saveComment(Comment.builder()
                 .user(user)
                 .image(image)
                 .text(commentAddRequest.getText()).build());
         actionService.setGrade(commentAddRequest.getUser_id(), commentAddRequest.getImage_id(), true);
+        commentNotificationService.addNotification(comment);
         return MS_SUCCESS_ADD;
     }
     public List<CommentResponse> getImageComments(ImageRequest imageRequest) throws NotFoundDatabaseException {
