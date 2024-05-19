@@ -1,6 +1,5 @@
 package angeelya.inPic.recommedation.controller;
 
-import angeelya.inPic.database.model.Recommendation;
 import angeelya.inPic.dto.request.UserInformationRequest;
 import angeelya.inPic.dto.response.CategoryRecommendationResponse;
 import angeelya.inPic.dto.response.ImageRecommendationResponse;

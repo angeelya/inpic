@@ -2,7 +2,6 @@ package angeelya.inPic.recommedation.service;
 
 import angeelya.inPic.database.model.Action;
 import angeelya.inPic.database.model.CategoryRecommendation;
-import angeelya.inPic.database.model.Recommendation;
 import angeelya.inPic.database.repository.CategoryRecommendationRepository;
 import angeelya.inPic.dto.request.UserInformationRequest;
 import angeelya.inPic.dto.response.CategoryRecommendationResponse;
