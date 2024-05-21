@@ -8,7 +8,7 @@ import angeelya.inPic.dto.response.CategoryRecommendationResponse;
 import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.image.service.CategoryService;
-import angeelya.inPic.user.service.UserService;
+import angeelya.inPic.user.service.UserGetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -22,15 +22,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryRecommendationService {
     private final SlopeOne slopeOne;
-    private final UserService userService;
+    private final UserGetService userGetService;
     private final CategoryRecommendationRepository categoryRecommendationRepository;
     private final CategoryService categoryService;
-    private final ActionService actionService;
     private final Double MIN_RECOMMEND_GRADE = 0.5;
+    private static final String MS_NOT_FOUND_LIST="No category recommendations found",MS_FAILED_ADD_LIST="Recommendations adding is failed",
+            MS_FAILED_UPDATE="Failed to update category recommendations",MS_FAILED_SAVE="Failed to save category recommendation";
 
 
-    public void recommend(Long user_id) throws NotFoundDatabaseException, NoAddDatabaseException {
-        List<Action> actions = actionService.getAllActions();
+    public void recommend(List<Action> actions, Long user_id) throws NotFoundDatabaseException, NoAddDatabaseException {
         Map<Long, Double> recommendationsMap = slopeOne.beginSlopeOne(makeData(actions), user_id);
         List<CategoryRecommendation> categoryRecommendations = makeRecommendations(recommendationsMap, user_id);
         writeRecommendation(categoryRecommendations);
@@ -39,7 +39,7 @@ public class CategoryRecommendationService {
 
     public List<CategoryRecommendationResponse> getPopularRecommendations() throws NotFoundDatabaseException {
         List<CategoryRecommendation> recommendations = categoryRecommendationRepository.findByGradeGreaterThanEqual(MIN_RECOMMEND_GRADE);
-        if (recommendations.isEmpty()) throw new NotFoundDatabaseException("No category recommendation found");
+        if (recommendations.isEmpty()) throw new NotFoundDatabaseException(MS_NOT_FOUND_LIST);
         return makeCategoryRecommendationResponses(recommendations);
     }
 
@@ -57,28 +57,28 @@ public class CategoryRecommendationService {
     }
 
     private List<CategoryRecommendation> findRecommendations(Long user_id) throws NotFoundDatabaseException {
-        userService.getUser(user_id);
+        userGetService.getUser(user_id);
         List<CategoryRecommendation> list = categoryRecommendationRepository.findByUser_IdAndGradeGreaterThanEqual(user_id, MIN_RECOMMEND_GRADE);
-        if (list.isEmpty()) throw new NotFoundDatabaseException("No category recommendation found");
+        if (list.isEmpty()) throw new NotFoundDatabaseException(MS_NOT_FOUND_LIST);
         return list;
     }
 
     private void saveRecommendations(List<CategoryRecommendation> recommendations) throws NoAddDatabaseException {
         try {
-            recommendations = categoryRecommendationRepository.saveAll(recommendations);
-            if (recommendations.isEmpty()) throw new NoAddDatabaseException("Recommendation adding is failed");
+            recommendations = (List<CategoryRecommendation>) categoryRecommendationRepository.saveAll(recommendations);
+            if (recommendations.isEmpty()) throw new NoAddDatabaseException(MS_FAILED_ADD_LIST);
         } catch (DataAccessException e) {
-            throw new NoAddDatabaseException("Failed to save");
+            throw new NoAddDatabaseException(MS_FAILED_ADD_LIST);
         }
     }
     private void writeRecommendation(List<CategoryRecommendation> recommendations) throws NoAddDatabaseException {
         saveRecommendations(recommendations.stream().filter(recommendation -> {
             CategoryRecommendation recommendationSearch = categoryRecommendationRepository.findByUser_IdAndCategory_Id(recommendation.getUser().getId(), recommendation.getCategory().getId());
-            return recommendationSearch != null ? false : true;
+            return recommendationSearch == null;
         }).collect(Collectors.toList()));
         updateRecommendation(recommendations.stream().filter(recommendation -> {
             CategoryRecommendation recommendationSearch = categoryRecommendationRepository.findByUser_IdAndCategory_Id(recommendation.getUser().getId(), recommendation.getCategory().getId());
-            return recommendationSearch != null ? true : false;
+            return recommendationSearch != null;
         }).collect(Collectors.toList()));
     }
 
@@ -87,7 +87,7 @@ public class CategoryRecommendationService {
             CategoryRecommendation recommendationUpdate = categoryRecommendationRepository.findByUser_IdAndCategory_Id(recommendation.getUser().getId(), recommendation.getCategory().getId());
             recommendationUpdate.setGrade(recommendation.getGrade());
             recommendationUpdate=saveRecommendation(recommendationUpdate);
-            if(!recommendationUpdate.getGrade().equals(recommendation.getGrade())) throw new NoAddDatabaseException("Failed to update category recommendation");
+            if(!recommendationUpdate.getGrade().equals(recommendation.getGrade())) throw new NoAddDatabaseException(MS_FAILED_UPDATE);
         }
     }
 
@@ -95,7 +95,7 @@ public class CategoryRecommendationService {
         try {
             return categoryRecommendationRepository.save(recommendationUpdate);
         } catch (DataAccessException e) {
-            throw new NoAddDatabaseException("Failed to save category recommendation");
+            throw new NoAddDatabaseException(MS_FAILED_SAVE);
         }
     }
 
@@ -104,7 +104,7 @@ public class CategoryRecommendationService {
         for (Map.Entry<Long, Double> entry : recommendationsMap.entrySet()) {
             recommendations.add(CategoryRecommendation.builder()
                     .category(categoryService.getCategory(entry.getKey()))
-                    .user(userService.getUser(user_id))
+                    .user(userGetService.getUser(user_id))
                     .grade(entry.getValue()).build());
         }
         return recommendations;
