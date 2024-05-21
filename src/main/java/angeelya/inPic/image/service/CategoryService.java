@@ -16,21 +16,24 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private  static final String MS_NOT_FOUND_LIST ="No categories found", MS_SUCCESS_ADD="Category adding is successful",
+            MS_NOT_FOUND = "Category not found",MS_FAILED_SAVE="Failed to save category";
+
 
     public List<Category> getAllCategory() throws NotFoundDatabaseException {
         List<Category> categories = categoryRepository.findAll();
-        if (categories.isEmpty()) throw new NotFoundDatabaseException("No categories found");
+        if (categories.isEmpty()) throw new NotFoundDatabaseException(MS_NOT_FOUND_LIST);
         return categories;
     }
 
     public String addCategory(CategoryAddingRequest categoryAddingRequest) throws NoAddDatabaseException {
         saveCategory(Category.builder().category(categoryAddingRequest.getCategory()).build());
-        return "Category adding is successful";
+        return MS_SUCCESS_ADD;
     }
 
     public Category getCategory(Long category_id) throws NotFoundDatabaseException {
         Optional<Category> category = categoryRepository.findById(category_id);
-        if (category.isEmpty()) throw new NotFoundDatabaseException("Category not found");
+        if (category.isEmpty()) throw new NotFoundDatabaseException(MS_NOT_FOUND);
         return category.get();
     }
 
@@ -38,7 +41,7 @@ public class CategoryService {
         try {
             categoryRepository.save(category);
         } catch (DataAccessException e) {
-            throw new NoAddDatabaseException("Failed to save category");
+            throw new NoAddDatabaseException(MS_FAILED_SAVE);
         }
     }
 }

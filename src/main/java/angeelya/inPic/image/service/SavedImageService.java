@@ -13,7 +13,7 @@ import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.file.service.ImageFileService;
 import angeelya.inPic.recommedation.service.ActionService;
-import angeelya.inPic.user.service.UserService;
+import angeelya.inPic.user.service.UserGetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -27,25 +27,29 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SavedImageService {
     private final SavedImageRepository savedImageRepository;
-    private final UserService userService;
+    private final UserGetService userGetService;
+    private final ImageGetService imageGetService;
     private final ImageService imageService;
     private final AlbumService albumService;
     private final ActionService actionService;
     private final ImageFileService imageFileService;
+    private static final String MS_FORBIDDEN = "User cannot save his image", MS_SUCCESS_ADD = "Saved image adding is successful",
+            MS_FAILED_SAVE = "Failed to add saved image", MS_NOT_FOUND = "No saved and created images found";
+
 
     public String addSavedImage(SavedImageAddRequest savedImageAddRequest) throws NotFoundDatabaseException, NoAddDatabaseException, ForbiddenRequestException {
-        User user = userService.getUser(savedImageAddRequest.getUser_id());
-        Image image = imageService.getImage(savedImageAddRequest.getImage_id());
+        User user = userGetService.getUser(savedImageAddRequest.getUser_id());
+        Image image = imageGetService.getImage(savedImageAddRequest.getImage_id());
         if (image.getUser().getId().equals(savedImageAddRequest.getUser_id()))
-            throw new ForbiddenRequestException("User cannot save his image");
+            throw new ForbiddenRequestException(MS_FORBIDDEN);
         if (savedImageAddRequest.getAlbum_id() != null)
             image.setAlbums(List.of(albumService.getAlbum(savedImageAddRequest.getAlbum_id())));
         try {
             savedImageRepository.save(SavedImage.builder().image(image).user(user).build());
             actionService.setGrade(savedImageAddRequest.getUser_id(), savedImageAddRequest.getImage_id(), true);
-            return "Saved image adding is successful";
+            return MS_SUCCESS_ADD;
         } catch (DataAccessException e) {
-            throw new NoAddDatabaseException("Failed to add saved image");
+            throw new NoAddDatabaseException(MS_FAILED_SAVE);
         }
     }
 
@@ -63,7 +67,7 @@ public class SavedImageService {
         } catch (NotFoundDatabaseException e) {
             if (!savedImages.isEmpty())
                 return savedImages;
-            else throw new NotFoundDatabaseException("No saved and created images found");
+            else throw new NotFoundDatabaseException(MS_NOT_FOUND);
         }
     }
 
@@ -74,6 +78,7 @@ public class SavedImageService {
         for (SavedImage savedImage : savedImages) {
             imageResponses.add(ImageResponse.builder()
                     .image_id(savedImage.getImage().getId())
+                    .imgName(savedImage.getImage().getImgName())
                     .name(savedImage.getImage().getName())
                     .image(imageFileService.getImage(savedImage.getImage().getImgName())).build());
         }

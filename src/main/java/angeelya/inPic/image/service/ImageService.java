@@ -11,60 +11,60 @@ import angeelya.inPic.dto.response.ImagePageResponse;
 import angeelya.inPic.dto.response.ImageResponse;
 import angeelya.inPic.file.service.ImageFileService;
 import angeelya.inPic.recommedation.service.ActionService;
-import angeelya.inPic.user.service.UserService;
+import angeelya.inPic.user.service.UserGetService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import static org.springframework.data.relational.core.sql.StatementBuilder.delete;
 
 @Service
 @RequiredArgsConstructor
 public class ImageService {
     private final ImageRepository imageRepository;
-    private final UserService userService;
+    private final UserGetService userGetService;
     private final ImageFileService imageFileService;
     private final CategoryService categoryService;
     private final AlbumService albumService;
     private final ActionService actionService;
+    private final ImageGetService imageGetService;
 
-    private final String MS_NOT_FOUND = "not found", MS_FAILED_DELETE = "Failed to delete image",
-            MS_SUCCESS_DELETE = "Image deleting is successful", MS_SUCCESS_ADD = "Image adding is successful", MS_FAILED_SAVE = "Failed to save image",
+    private static final String MS_NOT_FOUND_LIKED_IMAGE = "Liked image not found", MS_SUCCESS_ADD = "Image adding is successful", MS_FAILED_SAVE = "Failed to save image",
             MS_FORBIDDEN = "User cannot delete other user image", MS_FAILED_UPDATE = "Failed to update image data",
-            MS_SUCCESS_UPDATE = "Image updating is successful";
+            MS_SUCCESS_UPDATE = "Image updating is successful", MS_NOT_FOUND_CREATED_IMAGE = "No created images found";
+
 
     public List<ImageResponse> getLikedImage(UserInformationRequest userInformationRequest) throws FileException, NotFoundDatabaseException {
         List<Image> images = imageRepository.findByLike_User_Id(userInformationRequest.getUser_id());
-        if (images.isEmpty()) throw new NotFoundDatabaseException("Liked image " + MS_NOT_FOUND);
+        if (images.isEmpty()) throw new NotFoundDatabaseException(MS_NOT_FOUND_LIKED_IMAGE);
         List<ImageResponse> imageResponses = new ArrayList<>();
         for (Image image : images) {
-            imageResponses.add(new ImageResponse(image.getId(), imageFileService.getImage(image.getImgName()), image.getName()));
+            imageResponses.add(new ImageResponse(image.getId(), image.getImgName(), imageFileService.getImage(image.getImgName()), image.getName()));
         }
         return imageResponses;
     }
 
     public ImagePageResponse getImageData(ImagePageRequest imagePageRequest) throws NotFoundDatabaseException, FileException, NoAddDatabaseException {
-        Image image = getImage(imagePageRequest.getImage_id());
+        Image image = imageGetService.getImage(imagePageRequest.getImage_id());
         UserImage userImage = image.getUser().getUserImage();
-        actionService.setGrade(image.getId(), imagePageRequest.getUser_id(), true);
-        return ImagePageResponse.builder().
+        actionService.setGrade(imagePageRequest.getUser_id(), image.getId(), true);
+        ImagePageResponse imagePageResponse = ImagePageResponse.builder().
                 user_id(image.getUser().getId()).
-                imgName(image.getName()).
+                Name(image.getName()).
                 imgSystemName(image.getImgName()).
                 userName(image.getUser().getName()).
                 imgDescription(image.getDescription())
                 .image(imageFileService.getImage(image.getImgName()))
-                .userImg(imageFileService.getImage(userImage.getName()))
                 .likeCount(image.getLike().size()).build();
+        if (userImage != null) imagePageResponse.setUserImg(imageFileService.getImage(userImage.getName()));
+        return imagePageResponse;
     }
 
     public String addImage(ImageAddRequest imageAddRequest, MultipartFile multipartFile) throws NotFoundDatabaseException, FileException, NoAddDatabaseException {
-        User user = userService.getUser(imageAddRequest.getUser_id());
+        User user = userGetService.getUser(imageAddRequest.getUser_id());
         imageFileService.saveImage(multipartFile);
         Image image = Image.builder().user(user)
                 .category(categoryService.getCategory(imageAddRequest.getCategory_id()))
@@ -77,18 +77,13 @@ public class ImageService {
         return MS_SUCCESS_ADD;
     }
 
-    public Image getImage(Long image_id) throws NotFoundDatabaseException {
-        Optional<Image> image = imageRepository.findById(image_id);
-        if (image.isEmpty()) throw new NotFoundDatabaseException("Image data" + MS_NOT_FOUND);
-        return image.get();
-    }
-
     public List<ImageResponse> getUserCreatedImages(UserInformationRequest userInformationRequest) throws NotFoundDatabaseException, FileException {
         List<Image> images = imageRepository.findByUser_Id(userInformationRequest.getUser_id());
-        if (images.isEmpty()) throw new NotFoundDatabaseException("No created images found");
+        if (images.isEmpty()) throw new NotFoundDatabaseException(MS_NOT_FOUND_CREATED_IMAGE);
         List<ImageResponse> imageResponses = new ArrayList<>();
         for (Image image : images) {
             imageResponses.add(ImageResponse.builder()
+                    .imgName(image.getImgName())
                     .image_id(image.getId())
                     .name(image.getName())
                     .image(imageFileService.getImage(image.getImgName())).build());
@@ -97,8 +92,9 @@ public class ImageService {
     }
 
     public String updateImageData(ImageUpdateRequest imageUpdateRequest) throws NotFoundDatabaseException, ForbiddenRequestException, NoAddDatabaseException {
-        Image image = getImage(imageUpdateRequest.getImage_id());
-        if (!image.getUser().equals(imageUpdateRequest.getUser_id())) throw new ForbiddenRequestException(MS_FORBIDDEN);
+        Image image = imageGetService.getImage(imageUpdateRequest.getImage_id());
+        if (!image.getUser().getId().equals(imageUpdateRequest.getUser_id()))
+            throw new ForbiddenRequestException(MS_FORBIDDEN);
         image.setCategory(categoryService.getCategory(imageUpdateRequest.getCategory_id()));
         image.setDescription(imageUpdateRequest.getDescription());
         image.setName(imageUpdateRequest.getName());

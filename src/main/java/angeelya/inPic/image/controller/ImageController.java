@@ -31,12 +31,12 @@ public class ImageController {
     }
 
     @PostMapping("/page/data")
-    public ResponseEntity<ImagePageResponse> getPageImage(@RequestBody @Valid ImagePageRequest imagePageRequest, BindingResult bindingResult) throws FileException, ValidationErrorsException, NotFoundDatabaseException {
+    public ResponseEntity<ImagePageResponse> getPageImage(@RequestBody @Valid ImagePageRequest imagePageRequest, BindingResult bindingResult) throws FileException, ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException {
         validationErrorsService.validation(bindingResult);
         return ResponseEntity.ok(imageService.getImageData(imagePageRequest));
     }
-    @PostMapping("/add")
-    public ResponseEntity<MessageResponse>addImage(@RequestBody @Valid ImageAddRequest imageAddRequest,BindingResult bindingResult, @RequestParam("file")MultipartFile multipartFile) throws ValidationErrorsException, NotFoundDatabaseException, FileException, NoAddDatabaseException {
+    @PostMapping(value = "/add")
+    public ResponseEntity<MessageResponse>addImage(@RequestPart("file") MultipartFile multipartFile,@RequestPart @Valid ImageAddRequest imageAddRequest,BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, FileException, NoAddDatabaseException {
         validationErrorsService.validation(bindingResult);
         return ResponseEntity.ok(new MessageResponse(imageService.addImage(imageAddRequest,multipartFile)));
     }
