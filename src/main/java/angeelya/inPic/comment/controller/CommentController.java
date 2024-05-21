@@ -39,13 +39,13 @@ public class CommentController {
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<MessageResponse> deleteComment(@RequestBody @Valid CommentDeleteRequest commentDeleteRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, DeleteDatabaseException {
+    public ResponseEntity<MessageResponse> deleteComment(@RequestBody @Valid CommentDeleteRequest commentDeleteRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, DeleteDatabaseException, NoAddDatabaseException {
         validationErrorsService.validation(bindingResult);
         return ResponseEntity.ok(new MessageResponse(commentService.deleteComment(commentDeleteRequest)));
     }
 
     @PostMapping("/update")
-    public ResponseEntity<MessageResponse> updateComment(@RequestBody @Valid CommentAddRequest commentAddRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException, ForbiddenRequestException {
+    public ResponseEntity<MessageResponse> updateComment(@RequestBody @Valid CommentAddRequest commentAddRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException {
         validationErrorsService.validation(bindingResult);
         return ResponseEntity.ok(new MessageResponse(commentService.updateComment(commentAddRequest)));
     }
