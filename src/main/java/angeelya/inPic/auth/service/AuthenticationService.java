@@ -25,6 +25,8 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final String MS_INVALID_DATA = "Invalid username or password";
+
 
     public JwtTokenResponse register(RegisterRequest request) {
         var user = User.builder().login(request.getLogin())
@@ -44,7 +46,7 @@ public class AuthenticationService {
             return JwtTokenResponse.builder().jwtToken(jwt).user_id(user.getId()).role(user.getRole().name()).build();
         } catch (AuthenticationException e) {
             logger.info(e.getMessage());
-            throw new AuthException("Invalid username or password");
+            throw new AuthException(MS_INVALID_DATA);
         }
     }
 }

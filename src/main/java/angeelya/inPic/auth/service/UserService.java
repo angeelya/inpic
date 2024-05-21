@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
   private final UserRepository userRepository;
+  private static final String NOT_FOUND="User not found";
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByLogin(username).orElseThrow(()->new UsernameNotFoundException("User not found"));
+        return userRepository.findByLogin(username).orElseThrow(()->new UsernameNotFoundException(NOT_FOUND));
     }
 }

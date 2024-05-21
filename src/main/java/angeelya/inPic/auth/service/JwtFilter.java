@@ -22,14 +22,15 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserService userService;
+    private static final String AUTH="Authorization",BEARER="Bearer ";
 
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization");
+        final String authHeader = request.getHeader(AUTH);
         final String jwt;
         final String username;
-        if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, "Bearer ")) {
+        if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader,BEARER)) {
             filterChain.doFilter(request, response);
             return;
         }
