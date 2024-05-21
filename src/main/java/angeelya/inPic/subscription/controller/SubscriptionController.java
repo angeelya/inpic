@@ -27,7 +27,7 @@ public class SubscriptionController {
     private final SubscriptionService subscriptionService;
 
     @PostMapping("/add/friend")
-    public ResponseEntity<MessageResponse> addFriend(@RequestBody @Valid FriendAddRequest friendAddRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException {
+    public ResponseEntity<MessageResponse> addFriend(@RequestBody @Valid FriendAddRequest friendAddRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException, ForbiddenRequestException, ExistException {
         validationErrorsService.validation(bindingResult);
         return ResponseEntity.ok(new MessageResponse(subscriptionService.addFriend(friendAddRequest)));
     }
