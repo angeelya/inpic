@@ -25,21 +25,19 @@ public class AdminNotificationService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final AdminNotificationRepository adminNotificationRepository;
     private final ImageFileService imageFileService;
+    private static final String MS_FAILED_UPDATE="Failed to update admin notification",
+    MS_SUCCESS_UPDATE= "Update admin notification read is successful",MS_NOT_FOUND="No admin notifications found";
 
-    public void addNotification(DeletedImage deletedImage, User user) {
-        try {
-            adminNotificationRepository.save(AdminNotification.builder()
+    public AdminNotification addNotification(DeletedImage deletedImage, User user) {
+           return AdminNotification.builder()
                     .user(user)
                     .deletedImage(deletedImage)
                     .isRead(false)
-                    .build());
-        } catch (DataAccessException e) {
-            logger.error("Admin notification did not add");
-        }
+                    .build();
     }
 
     public CheckNotificationResponse checkNotification(UserInformationRequest userInformationRequest) {
-        List<AdminNotification> adminNotifications = adminNotificationRepository.findByUser_IdAndRead(userInformationRequest.getUser_id(), false);
+        List<AdminNotification> adminNotifications = adminNotificationRepository.findByUser_IdAndIsRead(userInformationRequest.getUser_id(), false);
         if (adminNotifications.isEmpty()) return CheckNotificationResponse.builder().haveNotification(false).build();
         return CheckNotificationResponse.builder().haveNotification(true).build();
     }
@@ -60,20 +58,20 @@ public class AdminNotificationService {
     public String readNotification(UserInformationRequest userInformationRequest) throws NotFoundDatabaseException, NoAddDatabaseException {
         List<AdminNotification> adminNotifications = getAdminNotifications(userInformationRequest.getUser_id());
         try {
-            adminNotifications = adminNotificationRepository.saveAll(adminNotifications.stream().map(adminNotification -> {
+            adminNotifications = (List<AdminNotification>) adminNotificationRepository.saveAll(adminNotifications.stream().map(adminNotification -> {
                         adminNotification.setRead(true);
                         return adminNotification;
                     }
             ).collect(Collectors.toList()));
-            if (adminNotifications.isEmpty()) throw new NoAddDatabaseException("Failed to update admin notification");
+            if (adminNotifications.isEmpty()) throw new NoAddDatabaseException(MS_FAILED_UPDATE);
         } catch (DataAccessException e) {
-            throw new NoAddDatabaseException("Failed to update admin notification");
+            throw new NoAddDatabaseException(MS_FAILED_UPDATE);
         }
-        return "Update admin notification read is successful";
+        return MS_SUCCESS_UPDATE;
     }
     private List<AdminNotification> getAdminNotifications(Long user_id) throws NotFoundDatabaseException {
         List<AdminNotification> adminNotifications = adminNotificationRepository.findByUser_Id(user_id);
-        if (adminNotifications.isEmpty()) throw new NotFoundDatabaseException("No admin notifications found");
+        if (adminNotifications.isEmpty()) throw new NotFoundDatabaseException(MS_NOT_FOUND);
         return adminNotifications;
     }
 }
