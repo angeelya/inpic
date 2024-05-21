@@ -32,9 +32,41 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToOne(optional = false,mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserImage userImage;
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Like> likes;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Action> actions;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Album> albums;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<CategoryRecommendation> categoryRecommendations;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Comment> comments;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Friend> subscription;
+    @JsonIgnore
+    @OneToMany(mappedBy = "subFriend",cascade = CascadeType.ALL)
+    private List<Friend> subscribers;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Image> images;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Recommendation> recommendations;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<SavedImage> savedImages;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Search> searches;
 
 
     @Override

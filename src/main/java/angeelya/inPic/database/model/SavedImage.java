@@ -16,9 +16,9 @@ public class SavedImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @JoinColumn(name = "user_id")
-    @ManyToOne(optional = false,cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private User user;
     @JoinColumn(name = "image_id")
-    @ManyToOne(optional = false,cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private Image image;
 }

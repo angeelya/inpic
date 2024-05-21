@@ -20,6 +20,6 @@ public class Search {
     private String text;
     @JsonIgnore
     @JoinColumn(name = "user_id")
-    @ManyToOne(optional = false,cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private User user;
 }

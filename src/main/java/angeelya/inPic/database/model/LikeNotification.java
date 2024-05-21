@@ -19,6 +19,6 @@ public class LikeNotification {
     @Column(name="is_read")
     private boolean isRead;
     @JoinColumn(name = "like_id")
-    @OneToOne(optional = false,cascade = CascadeType.ALL)
+    @OneToOne(optional = false)
     private Like like;
 }

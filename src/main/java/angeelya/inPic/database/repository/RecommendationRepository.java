@@ -10,8 +10,9 @@ import java.util.Optional;
 @Repository
 public interface RecommendationRepository extends CrudRepository<Recommendation,Long> {
 
-    List<Recommendation> saveAll(List<Recommendation> list);
+    @Override
+    <S extends Recommendation> Iterable<S> saveAll(Iterable<S> entities);
 
-    List<Recommendation> findByUser_IdAndGradeGreaterThanEqual(Long user_id,Double minGrade);
+    List<Recommendation> findByUser_IdAndGradeGreaterThanEqual(Long user_id, Double minGrade);
     Recommendation findByUser_IdAndImage_Id(Long user_id, Long image_id);
 }

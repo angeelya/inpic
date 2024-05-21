@@ -19,7 +19,7 @@ public class UserImage {
     private String path;
     private String name;
     @JsonIgnore
-    @JoinColumn(name = "user_id")
-    @OneToOne(optional = false,cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id",nullable = true)
+    @OneToOne(optional = false)
     private User user;
 }

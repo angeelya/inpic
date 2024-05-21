@@ -11,7 +11,8 @@ import java.util.List;
 public interface CommentNotificationRepository extends CrudRepository<CommentNotification, Long> {
     List<CommentNotification> findByComment_User_Id(Long user_id);
 
-    List<CommentNotification> saveAll(List<CommentNotification> likeNotifications);
+    @Override
+    <S extends CommentNotification> Iterable<S> saveAll(Iterable<S> entities);
 
-    List<CommentNotification> findByComment_User_IdAndRead(Long user_id, boolean read);
+    List<CommentNotification> findByComment_User_IdAndIsRead(Long user_id, boolean read);
 }

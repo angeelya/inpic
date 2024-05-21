@@ -24,15 +24,28 @@ public class Image {
     private String name;
     private String description;
     @JoinColumn(name = "user_id")
-    @ManyToOne(optional = false,cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private User user;
     @JoinColumn(name = "category_id")
-    @ManyToOne(optional = false,cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private Category category;
     @JsonIgnore
     @ManyToMany(mappedBy = "images")
     private List<Album> albums;
-    @OneToMany(mappedBy = "image")
+    @JsonIgnore
+    @OneToMany(mappedBy = "image",cascade = CascadeType.ALL)
     private List<Like> like;
+    @JsonIgnore
+    @OneToMany(mappedBy = "image",cascade = CascadeType.ALL)
+    private List<Action> actions;
+    @JsonIgnore
+    @OneToMany(mappedBy = "image",cascade = CascadeType.ALL)
+    private List<Comment> comments;
+    @JsonIgnore
+    @OneToMany(mappedBy = "image",cascade = CascadeType.ALL)
+    private List<Recommendation> recommendations;
+    @JsonIgnore
+    @OneToMany(mappedBy = "image",cascade = CascadeType.ALL)
+    private List<SavedImage> savedImages;
 
 }

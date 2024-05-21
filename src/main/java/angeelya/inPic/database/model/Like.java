@@ -1,4 +1,5 @@
 package angeelya.inPic.database.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,9 +17,12 @@ public class Like {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @JoinColumn(name = "user_id")
-    @ManyToOne(optional = false,cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private User user;
     @JoinColumn(name = "image_id")
-    @ManyToOne(optional = false,cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private Image image;
+    @JsonIgnore
+    @OneToOne(optional = false,mappedBy = "like",cascade = CascadeType.ALL)
+    private LikeNotification likeNotification;
 }

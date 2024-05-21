@@ -22,6 +22,6 @@ public class AdminNotification {
     @ManyToOne(optional = false,cascade = CascadeType.ALL)
     private User user;
     @JoinColumn(name = "deleted_image_id")
-    @OneToOne(optional = false,cascade = CascadeType.ALL)
+    @OneToOne(optional = false)
     private DeletedImage deletedImage;
 }

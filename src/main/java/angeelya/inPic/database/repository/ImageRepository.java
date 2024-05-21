@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ImageRepository extends CrudRepository<Image,Long> {
     List<Image> findByNameIsLikeIgnoreCaseOrCategory_CategoryIsLikeIgnoreCaseOrDescriptionIsLikeIgnoreCase(String name,String category, String description);
     List<Image> findByLike_User_Id(Long user_id);
-    List<Image> findAllById(List<Long> ids);
+    List<Image> findAllByIdIn(List<Long> ids);
     List<Image> findByUser_Id(Long user_id);
     List<Image> findAll();
 }

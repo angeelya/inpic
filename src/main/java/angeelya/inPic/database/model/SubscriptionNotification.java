@@ -19,6 +19,6 @@ public class SubscriptionNotification {
     @Column(name="is_read")
     private boolean isRead;
     @JoinColumn(name = "friend_id")
-    @OneToOne(optional = false,cascade = CascadeType.ALL)
+    @OneToOne(optional = false)
     private Friend friend;
 }

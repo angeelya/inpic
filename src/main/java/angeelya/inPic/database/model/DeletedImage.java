@@ -1,5 +1,6 @@
 package angeelya.inPic.database.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,4 +21,7 @@ public class DeletedImage {
     private String cause;
     @Column(name = "img_name")
     private String imgName;
+    @JsonIgnore
+    @OneToOne(optional = false,mappedBy = "deletedImage",cascade = CascadeType.ALL)
+    private AdminNotification adminNotification;
 }

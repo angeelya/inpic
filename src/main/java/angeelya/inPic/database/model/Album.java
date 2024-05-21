@@ -20,7 +20,7 @@ public class Album {
     private String name;
     private Boolean security;
     @JoinColumn(name = "user_id")
-    @ManyToOne(optional = false,cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private User user;
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(joinColumns = @JoinColumn(name = "album_id") ,

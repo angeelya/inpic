@@ -19,9 +19,9 @@ public class CategoryRecommendation {
     private Long id;
     private Double grade;
     @JoinColumn(name = "user_id")
-    @ManyToOne(optional = false,cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private User user;
     @JoinColumn(name = "category_id")
-    @ManyToOne(optional = false,cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private Category category;
 }

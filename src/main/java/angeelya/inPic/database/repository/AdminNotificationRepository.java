@@ -11,7 +11,7 @@ import java.util.List;
 public interface AdminNotificationRepository extends CrudRepository<AdminNotification,Long> {
     List<AdminNotification> findByUser_Id(Long user_id);
 
-    List<AdminNotification> saveAll(List<AdminNotification> adminNotifications);
-
-    List<AdminNotification> findByUser_IdAndRead(Long user_id, boolean read);
+    @Override
+    <S extends AdminNotification> Iterable<S> saveAll(Iterable<S> entities);
+    List<AdminNotification> findByUser_IdAndIsRead(Long user_id, boolean read);
 }

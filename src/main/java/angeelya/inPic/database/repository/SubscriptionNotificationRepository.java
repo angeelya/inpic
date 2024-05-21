@@ -10,6 +10,9 @@ import java.util.List;
 @Repository
 public interface SubscriptionNotificationRepository extends CrudRepository<SubscriptionNotification,Long> {
     List<SubscriptionNotification> findByFriend_SubFriend_Id(Long user_id);
-    List<SubscriptionNotification> saveAll(List<SubscriptionNotification> likeNotifications);
-    List<SubscriptionNotification> findByFriend_SubFriend_IdAndRead(Long user_id, Boolean isRead);
+
+    @Override
+    <S extends SubscriptionNotification> Iterable<S> saveAll(Iterable<S> entities);
+
+    List<SubscriptionNotification> findByFriend_SubFriend_IdAndIsRead(Long user_id, Boolean isRead);
 }

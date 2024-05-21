@@ -19,6 +19,6 @@ public class CommentNotification {
     @Column(name="is_read")
     private boolean isRead;
     @JoinColumn(name = "comment_id")
-    @OneToOne(optional = false,cascade = CascadeType.ALL)
+    @OneToOne(optional = false)
     private Comment comment;
 }

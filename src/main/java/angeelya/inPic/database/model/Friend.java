@@ -1,9 +1,12 @@
 package angeelya.inPic.database.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Table(name = "friend")
@@ -22,4 +25,7 @@ public class Friend {
     @ManyToOne
     @JoinColumn(name = "friend_id")
     private User subFriend;
+    @JsonIgnore
+    @OneToOne(mappedBy = "friend",cascade = CascadeType.ALL)
+    private SubscriptionNotification subscriptionNotifications;
 }

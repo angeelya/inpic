@@ -17,10 +17,10 @@ public class Recommendation {
     private Long id;
     private Double grade;
     @JoinColumn(name = "user_id")
-    @ManyToOne(optional = false,cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private User user;
     @JoinColumn(name = "image_id")
-    @ManyToOne(optional = false,cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private Image image;
 
 }
