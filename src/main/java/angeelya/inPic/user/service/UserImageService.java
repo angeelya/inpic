@@ -20,8 +20,10 @@ public class UserImageService {
     private final ImageFileService imageFileService;
     private final UserImageRepository userImageRepository;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final String MS_FAILED_ADD = "Failed to add user image";
 
-    public Resource getUserImage(User user) {
+
+    public String getUserImage(User user) {
         UserImage userImage = user.getUserImage();
         if (userImage == null) return null;
         try {
@@ -31,12 +33,5 @@ public class UserImageService {
             return null;
         }
     }
-    public UserImage addUserImage(UserImage userImage, MultipartFile multipartFile) throws NoAddDatabaseException {
-        try {
-            imageFileService.saveImage(multipartFile);
-            return userImageRepository.save(userImage);
-        } catch (DataAccessException|FileException e) {
-            throw new NoAddDatabaseException("Failed to add user image");
-        }
-    }
+
 }

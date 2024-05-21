@@ -10,11 +10,13 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
-    private UserRepository userRepository;
+public class UserGetService {
+    private final UserRepository userRepository;
+    private static final String MS_NOT_FOUND="User not found";
+
     public User getUser(Long user_id) throws NotFoundDatabaseException {
-        Optional<User> user = userRepository.findByIdAndUserImageNotNullOrUserImageNull(user_id);
-        if (user.isEmpty()) throw new NotFoundDatabaseException("User not found");
+        Optional<User> user = userRepository.findById(user_id);
+        if (user.isEmpty()) throw new NotFoundDatabaseException(MS_NOT_FOUND);
         return user.get();
     }
 

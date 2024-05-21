@@ -2,10 +2,7 @@ package angeelya.inPic.user.controller;
 
 import angeelya.inPic.dto.request.*;
 import angeelya.inPic.dto.response.MessageResponse;
-import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
-import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
-import angeelya.inPic.exception_handling.exception.PasswordUpdateException;
-import angeelya.inPic.exception_handling.exception.ValidationErrorsException;
+import angeelya.inPic.exception_handling.exception.*;
 import angeelya.inPic.user.service.UserSettingsService;
 import angeelya.inPic.validation.service.ValidationErrorsService;
 import jakarta.validation.Valid;
@@ -47,7 +44,7 @@ public class UserSettingsController {
     }
 
     @PostMapping("/update/image")
-    public ResponseEntity<MessageResponse> updateImage(@RequestBody @Valid UserInformationRequest userInformationRequest, BindingResult bindingResult, @RequestParam("file") MultipartFile multipartFile) throws ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException {
+    public ResponseEntity<MessageResponse> updateImage(@RequestPart("file") MultipartFile multipartFile,@RequestPart("user")@Valid UserInformationRequest userInformationRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException, FileException {
         validationErrorsService.validation(bindingResult);
         return ResponseEntity.ok(new MessageResponse(userSettingsService.updateUserImage(multipartFile,userInformationRequest)));
     }
