@@ -13,6 +13,6 @@ import org.springframework.core.io.Resource;
 public class UserSubscriptionResponse {
     private Long subscription_id;
     private String subName;
-    private Resource subImage;
+    private String subImage;
 
 }

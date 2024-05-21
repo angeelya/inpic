@@ -13,7 +13,7 @@ import org.springframework.core.io.Resource;
 public class CommentNotificationResponse {
     private Long actor_id;
     private String actorName;
-    private Resource actorImage;
+    private String actorImage;
     private Long image_id;
     private String text;
     private Boolean isRead;

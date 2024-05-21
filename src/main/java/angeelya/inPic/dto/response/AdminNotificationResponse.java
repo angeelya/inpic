@@ -13,5 +13,5 @@ import org.springframework.core.io.Resource;
 public class AdminNotificationResponse {
      private boolean isRead;
      private String cause;
-     private Resource deletedImage;
+     private String deletedImage;
 }

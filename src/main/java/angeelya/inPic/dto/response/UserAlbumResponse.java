@@ -14,5 +14,5 @@ import org.springframework.core.io.Resource;
 public class UserAlbumResponse {
     private Long album_id;
     private String name;
-    private Resource lastImage;
+    private String lastImage;
 }

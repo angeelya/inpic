@@ -1,6 +1,7 @@
 package angeelya.inPic.dto.request;
 
 import angeelya.inPic.validation.annotation.NameContent;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,5 +26,6 @@ public class AlbumAddRequest {
     private String name;
     @NotNull(message ="Security should be not null")
     private Boolean security;
+    @JsonProperty("images")
     private List<ImageRequest> imageRequests;
 }

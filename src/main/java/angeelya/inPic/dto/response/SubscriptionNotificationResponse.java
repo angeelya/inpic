@@ -13,6 +13,6 @@ import org.springframework.core.io.Resource;
 public class SubscriptionNotificationResponse {
     private Long friend_id;
     private String friendName;
-    private Resource friendImage;
+    private String friendImage;
     private Boolean isRead;
 }

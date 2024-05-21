@@ -13,5 +13,5 @@ import org.springframework.core.io.Resource;
 public class UserSubscriberResponse {
     private Long subscriber_id;
     private String subName;
-    private Resource subImage;
+    private String subImage;
 }

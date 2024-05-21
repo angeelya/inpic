@@ -13,8 +13,9 @@ import org.springframework.core.io.Resource;
 public class LikeNotificationResponse {
     private Long actor_id;
     private String actorName;
-    private Resource actorImage;
+    private String actorImage;
     private Long image_id;
-    private Resource image;
+    private String imgName;
+    private String image;
     private Boolean isRead;
 }

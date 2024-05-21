@@ -1,5 +1,6 @@
 package angeelya.inPic.dto.request;
 import angeelya.inPic.validation.annotation.CategoryContent;
+import angeelya.inPic.validation.annotation.UniqueCategory;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class CategoryAddingRequest {
     @NotNull(message ="Category should be not null" )
     @Size(min = 1, max=250, message = "Category should be more than 1 and less than 250")
+    @UniqueCategory
     @CategoryContent
     public String category;
 }

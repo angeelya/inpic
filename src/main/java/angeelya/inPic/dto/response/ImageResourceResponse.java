@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.core.io.Resource;
 
 @Builder
 @Data
@@ -12,5 +11,6 @@ import org.springframework.core.io.Resource;
 @NoArgsConstructor
 public class ImageResourceResponse {
     private Long image_id;
-    private Resource image;
+    private String imgName;
+    private String image;
 }

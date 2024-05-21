@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.core.io.Resource;
 
 @Data
 @Builder
@@ -14,5 +13,5 @@ public class UserDataForProfileResponse {
     private String login;
     private String name;
     private String description;
-    private Resource userImage;
+    private String userImage;
 }

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.core.io.Resource;
 
 @Data
 @Builder
@@ -13,11 +12,11 @@ import org.springframework.core.io.Resource;
 public class ImagePageResponse {
     private Long user_id;
     private String imgSystemName;
-    private String imgName;
+    private String Name;
     private String userName;
     private String imgDescription;
-    private Resource userImg;
-    private Resource image;
+    private String userImg;
+    private String image;
     private Integer likeCount;
 
 }
