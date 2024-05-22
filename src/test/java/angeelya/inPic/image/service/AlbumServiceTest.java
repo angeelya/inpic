@@ -201,7 +201,7 @@ class AlbumServiceTest {
 
     @SneakyThrows
     @Test
-    void updateAlbumData() {
+    void testUpdateAlbumData() {
         Long album_id = 1L;
         Album album = Album.builder().id(album_id)
                 .user(User.builder().id(1L).build()).name("Album").images(List.of(Image.builder()
@@ -226,7 +226,7 @@ class AlbumServiceTest {
 
     @SneakyThrows
     @Test
-    void deleteAlbum() {
+    void testDeleteAlbum() {
         Long album_id=1L;
         AlbumRequest albumRequest = new AlbumRequest(album_id);
         Mockito.when(albumRepository.findById(album_id)).thenReturn(Optional.empty());
