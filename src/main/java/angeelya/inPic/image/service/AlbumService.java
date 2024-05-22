@@ -68,8 +68,9 @@ public class AlbumService {
                 .user(user)
                 .security(albumAddRequest.getSecurity())
                 .build();
-        if (albumAddRequest.getImageRequests()!=null)
-            album = getImagesIntoAlbum(album, albumAddRequest.getImageRequests());
+        if (albumAddRequest.getImageRequests()!=null) {
+            album.setImages(getImagesIntoAlbum(albumAddRequest.getImageRequests()));
+        }
         saveAlbum(album);
         return MS_SUCCESS_ADD;
     }
@@ -102,7 +103,8 @@ public class AlbumService {
         images.remove(img);
         album.setImages(images);
         album = saveAlbum(album);
-        if (album.getImages().contains(img)) throw new NoAddDatabaseException(MS_FAILED_UPDATE_IMAGE_LIST);
+        if (album.getImages().contains(img))
+            throw new NoAddDatabaseException(MS_FAILED_UPDATE_IMAGE_LIST);
         return MS_SUCCESS_IMAGE_LIST_ADD;
     }
 
@@ -140,12 +142,11 @@ public class AlbumService {
         }
     }
 
-    private Album getImagesIntoAlbum(Album album, List<ImageRequest> imageRequests) throws NotFoundDatabaseException {
+    private List<Image> getImagesIntoAlbum(List<ImageRequest> imageRequests) throws NotFoundDatabaseException {
         List<Long> imagesLong = imageRequests.stream().map(ImageRequest::getImage_id).collect(Collectors.toList());
         List<Image> images = imageRepository.findAllByIdIn(imagesLong);
         if(images.isEmpty()) throw new NotFoundDatabaseException(MS_NOT_FOUND_IMAGES);
-        album.setImages(images);
-        return album;
+        return images;
     }
 
 }
