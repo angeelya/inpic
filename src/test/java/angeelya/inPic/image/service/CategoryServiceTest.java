@@ -30,7 +30,7 @@ class CategoryServiceTest {
 
     @SneakyThrows
     @Test
-    void getAllCategory() {
+    void testGetAllCategory() {
         Long category_id=1L;
         List<Category> exceptedCategories = List.of(Category.builder()
                 .id(category_id)
@@ -44,7 +44,7 @@ class CategoryServiceTest {
 
     @SneakyThrows
     @Test
-    void addCategory() {
+    void testAddCategory() {
         CategoryAddingRequest categoryAddingRequest =
                 CategoryAddingRequest.builder().category("Category").build();
         Category category = Category.builder().category("Category").build();
@@ -56,7 +56,7 @@ class CategoryServiceTest {
 
     @SneakyThrows
     @Test
-    void getCategory() {
+    void testGetCategory() {
         Long category_id=1L;
         Category category = Category.builder().id(category_id).category("Category").build();
         Mockito.when(categoryRepository.findById(category_id)).thenReturn(Optional.of(category));
