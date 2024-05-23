@@ -17,7 +17,7 @@ public class AdminNotification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name="is_read")
-    private boolean isRead;
+    private Boolean isRead;
     @JoinColumn(name = "user_id")
     @ManyToOne(optional = false,cascade = CascadeType.ALL)
     private User user;

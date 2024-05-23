@@ -17,7 +17,7 @@ public class CommentNotification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name="is_read")
-    private boolean isRead;
+    private Boolean isRead;
     @JoinColumn(name = "comment_id")
     @OneToOne(optional = false)
     private Comment comment;

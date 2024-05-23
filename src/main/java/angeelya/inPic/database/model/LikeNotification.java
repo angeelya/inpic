@@ -17,7 +17,7 @@ public class LikeNotification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name="is_read")
-    private boolean isRead;
+    private Boolean isRead;
     @JoinColumn(name = "like_id")
     @OneToOne(optional = false)
     private Like like;
