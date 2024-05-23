@@ -1,9 +1,9 @@
 package angeelya.inPic.user.service;
 
-import angeelya.inPic.database.model.User;
-import angeelya.inPic.database.model.UserImage;
 import angeelya.inPic.dto.request.UserInformationRequest;
 import angeelya.inPic.dto.response.UserDataForProfileResponse;
+import angeelya.inPic.database.model.User;
+import angeelya.inPic.database.model.UserImage;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

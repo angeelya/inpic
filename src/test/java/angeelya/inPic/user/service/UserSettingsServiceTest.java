@@ -1,11 +1,11 @@
 package angeelya.inPic.user.service;
 
-import angeelya.inPic.database.model.User;
-import angeelya.inPic.database.model.UserImage;
-import angeelya.inPic.database.repository.UserRepository;
 import angeelya.inPic.dto.request.*;
 import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.PasswordUpdateException;
+import angeelya.inPic.database.model.User;
+import angeelya.inPic.database.model.UserImage;
+import angeelya.inPic.database.repository.UserRepository;
 import angeelya.inPic.file.service.ImageFileService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;

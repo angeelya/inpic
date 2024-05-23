@@ -1,8 +1,8 @@
 package angeelya.inPic.user.service;
 
+import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.database.model.User;
 import angeelya.inPic.database.repository.UserRepository;
-import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
