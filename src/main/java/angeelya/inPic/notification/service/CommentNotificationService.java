@@ -64,11 +64,11 @@ public class CommentNotificationService {
         List<CommentNotification> commentNotifications = getCommentNotifications(userInformationRequest.getUser_id());
         try {
             commentNotifications = (List<CommentNotification>) commentNotificationRepository.saveAll(commentNotifications.stream().map(commentNotification -> {
-                        commentNotification.setRead(true);
+                        commentNotification.setIsRead(true);
                         return commentNotification;
                     }
             ).collect(Collectors.toList()));
-            if (commentNotifications.isEmpty())
+            if (commentNotifications.isEmpty()||!commentNotifications.get(0).getIsRead().equals(true))
                 throw new NoAddDatabaseException(MS_FAILED_UPDATE);
         } catch (DataAccessException e) {
             throw new NoAddDatabaseException(MS_FAILED_UPDATE);

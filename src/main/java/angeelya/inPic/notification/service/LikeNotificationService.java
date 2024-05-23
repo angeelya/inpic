@@ -54,7 +54,7 @@ public class LikeNotificationService {
                     .image_id(like.getImage().getId())
                     .imgName(like.getImage().getImgName())
                     .image(imageFileService.getImage(like.getImage().getImgName()))
-                    .isRead(likeNotification.isRead()).build();
+                    .isRead(likeNotification.getIsRead()).build();
             if (userImage != null)
                 likeNotificationResponse.setActorImage(imageFileService.getImage(userImage.getName()));
             likeNotificationResponses.add(likeNotificationResponse);
@@ -66,11 +66,11 @@ public class LikeNotificationService {
         List<LikeNotification> likeNotifications = getLikeNotifications(userInformationRequest.getUser_id());
         try {
             likeNotifications = (List<LikeNotification>) likeNotificationRepository.saveAll(likeNotifications.stream().map(likeNotification -> {
-                        likeNotification.setRead(true);
+                        likeNotification.setIsRead(true);
                         return likeNotification;
                     }
             ).collect(Collectors.toList()));
-            if (likeNotifications.isEmpty()) throw new NoAddDatabaseException(MS_FAILED_UPDATE);
+            if (likeNotifications.isEmpty()||!likeNotifications.get(0).getIsRead().equals(true)) throw new NoAddDatabaseException(MS_FAILED_UPDATE);
         } catch (DataAccessException e) {
             throw new NoAddDatabaseException(MS_FAILED_UPDATE);
         }

@@ -10,8 +10,6 @@ import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.file.service.ImageFileService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AdminNotificationService {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final AdminNotificationRepository adminNotificationRepository;
     private final ImageFileService imageFileService;
     private static final String MS_FAILED_UPDATE="Failed to update admin notification",
@@ -49,7 +46,7 @@ public class AdminNotificationService {
             DeletedImage deletedImage = adminNotification.getDeletedImage();
             adminNotificationResponses.add(AdminNotificationResponse.builder()
                     .cause(deletedImage.getCause())
-                    .isRead(adminNotification.isRead())
+                    .isRead(adminNotification.getIsRead())
                     .deletedImage(imageFileService.getImage(deletedImage.getImgName())).build());
         }
         return adminNotificationResponses;
@@ -59,11 +56,11 @@ public class AdminNotificationService {
         List<AdminNotification> adminNotifications = getAdminNotifications(userInformationRequest.getUser_id());
         try {
             adminNotifications = (List<AdminNotification>) adminNotificationRepository.saveAll(adminNotifications.stream().map(adminNotification -> {
-                        adminNotification.setRead(true);
+                        adminNotification.setIsRead(true);
                         return adminNotification;
                     }
             ).collect(Collectors.toList()));
-            if (adminNotifications.isEmpty()) throw new NoAddDatabaseException(MS_FAILED_UPDATE);
+            if (adminNotifications.isEmpty()||!adminNotifications.get(0).getIsRead().equals(true)) throw new NoAddDatabaseException(MS_FAILED_UPDATE);
         } catch (DataAccessException e) {
             throw new NoAddDatabaseException(MS_FAILED_UPDATE);
         }

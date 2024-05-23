@@ -2,7 +2,6 @@ package angeelya.inPic.notification.service;
 
 import angeelya.inPic.database.model.Friend;
 import angeelya.inPic.database.model.SubscriptionNotification;
-import angeelya.inPic.database.model.User;
 import angeelya.inPic.database.model.UserImage;
 import angeelya.inPic.database.repository.SubscriptionNotificationRepository;
 import angeelya.inPic.dto.request.UserInformationRequest;
@@ -65,11 +64,11 @@ public class SubscriptionNotificationService {
         List<SubscriptionNotification> subscriptionNotifications = getSubscriptionsNotifications(userInformationRequest.getUser_id());
         try {
             subscriptionNotifications = (List<SubscriptionNotification>) subscriptionNotificationRepository.saveAll(subscriptionNotifications.stream().map(subscriptionNotification -> {
-                        subscriptionNotification.setRead(true);
+                        subscriptionNotification.setIsRead(true);
                         return subscriptionNotification;
                     }
             ).collect(Collectors.toList()));
-            if (subscriptionNotifications.isEmpty()) throw new NoAddDatabaseException(MS_FAILED_UPDATE);
+            if (subscriptionNotifications.isEmpty()||!subscriptionNotifications.get(0).getIsRead().equals(true)) throw new NoAddDatabaseException(MS_FAILED_UPDATE);
         } catch (DataAccessException e) {
             throw new NoAddDatabaseException(MS_FAILED_UPDATE);
         }
