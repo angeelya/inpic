@@ -1,10 +1,10 @@
 package angeelya.inPic.image.controller;
 
 import angeelya.inPic.dto.request.*;
+import angeelya.inPic.exception_handling.exception.*;
 import angeelya.inPic.dto.response.ImagePageResponse;
 import angeelya.inPic.dto.response.ImageResponse;
 import angeelya.inPic.dto.response.MessageResponse;
-import angeelya.inPic.exception_handling.exception.*;
 import angeelya.inPic.image.service.SavedImageService;
 import angeelya.inPic.validation.service.ValidationErrorsService;
 import angeelya.inPic.image.service.ImageService;
@@ -36,12 +36,12 @@ public class ImageController {
         return ResponseEntity.ok(imageService.getImageData(imagePageRequest));
     }
     @PostMapping(value = "/add")
-    public ResponseEntity<MessageResponse>addImage(@RequestPart("file") MultipartFile multipartFile,@RequestPart @Valid ImageAddRequest imageAddRequest,BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, FileException, NoAddDatabaseException {
+    public ResponseEntity<MessageResponse>addImage(@RequestPart("file") MultipartFile multipartFile, @RequestPart @Valid ImageAddRequest imageAddRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, FileException, NoAddDatabaseException {
         validationErrorsService.validation(bindingResult);
         return ResponseEntity.ok(new MessageResponse(imageService.addImage(imageAddRequest,multipartFile)));
     }
     @PostMapping("/update/data")
-    public ResponseEntity<MessageResponse> updateImageData(@RequestBody @Valid ImageUpdateRequest imageUpdateRequest,BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException, ForbiddenRequestException {
+    public ResponseEntity<MessageResponse> updateImageData(@RequestBody @Valid ImageUpdateRequest imageUpdateRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException, ForbiddenRequestException {
         validationErrorsService.validation(bindingResult);
         return ResponseEntity.ok(new MessageResponse(imageService.updateImageData(imageUpdateRequest)));
     }
