@@ -25,7 +25,7 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getAllImagePost());
     }
     @PostMapping("/delete/image/post")
-    public ResponseEntity<MessageResponse> deleteImagePost(@RequestBody @Valid ImageRequest imageRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, FileException, DeleteDatabaseException, NoAddDatabaseException {
+    public ResponseEntity<MessageResponse> deleteImagePost(@RequestBody @Valid ImageRequest imageRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, DeleteDatabaseException, NoAddDatabaseException {
         validationErrorsService.validation(bindingResult);
         return ResponseEntity.ok(new MessageResponse(adminService.deleteImagePost(imageRequest)));
     }
