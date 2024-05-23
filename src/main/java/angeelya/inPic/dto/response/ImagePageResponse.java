@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class ImagePageResponse {
     private Long user_id;
     private String imgSystemName;
-    private String Name;
+    private String name;
     private String userName;
     private String imgDescription;
     private String userImg;
