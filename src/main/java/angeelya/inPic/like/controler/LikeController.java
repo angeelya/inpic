@@ -1,9 +1,9 @@
 package angeelya.inPic.like.controler;
 
-import angeelya.inPic.dto.request.LikeRequest;
-import angeelya.inPic.dto.response.MessageResponse;
 import angeelya.inPic.exception_handling.exception.*;
 import angeelya.inPic.like.service.LikeService;
+import angeelya.inPic.dto.request.LikeRequest;
+import angeelya.inPic.dto.response.MessageResponse;
 import angeelya.inPic.validation.service.ValidationErrorsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
