@@ -46,7 +46,7 @@ class ImageRecommendationServiceTest {
 
     @SneakyThrows
     @Test
-    void recommend() {
+    void testRecommend() {
         Long user_id = 1L;
         List<Action> actions = new ArrayList<>();
         User user = User.builder().id(user_id).build();
@@ -103,7 +103,7 @@ class ImageRecommendationServiceTest {
 
     @SneakyThrows
     @Test
-    void getRecommendations() {
+    void testGetRecommendations() {
         Long user_id = 1L;
         UserInformationRequest userInformationRequest = new UserInformationRequest(user_id);
         User user = User.builder().id(user_id).build();
