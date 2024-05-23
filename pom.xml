@@ -13,13 +13,20 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>inPic</name>
 	<description>Service for inPic</description>
+	<packaging>jar</packaging>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>19</java.version>
+		<start-class>angeelya.inPic.InPicApplication</start-class>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-docker-compose</artifactId>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -99,8 +106,12 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>${project.parent.version}</version>
+				<configuration>
+					<excludeDockerCompose>false</excludeDockerCompose>
+					<mainClass>angeelya.inPic.InPicApplication</mainClass>
+					<layout>JAR</layout>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
