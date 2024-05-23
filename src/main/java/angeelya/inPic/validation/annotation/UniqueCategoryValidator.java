@@ -1,9 +1,7 @@
 package angeelya.inPic.validation.annotation;
 
 import angeelya.inPic.database.model.Category;
-import angeelya.inPic.database.model.User;
 import angeelya.inPic.database.repository.CategoryRepository;
-import angeelya.inPic.database.repository.UserRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
