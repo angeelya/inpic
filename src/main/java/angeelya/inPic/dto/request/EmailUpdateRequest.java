@@ -3,7 +3,6 @@ package angeelya.inPic.dto.request;
 import angeelya.inPic.validation.annotation.EmailContent;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

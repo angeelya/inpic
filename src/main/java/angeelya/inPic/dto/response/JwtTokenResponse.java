@@ -1,6 +1,5 @@
 package angeelya.inPic.dto.response;
 
-import angeelya.inPic.database.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

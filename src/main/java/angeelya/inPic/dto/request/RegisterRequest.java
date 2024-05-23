@@ -4,8 +4,6 @@ import angeelya.inPic.validation.annotation.EmailContent;
 import angeelya.inPic.validation.annotation.LoginContent;
 import angeelya.inPic.validation.annotation.UniqueEmail;
 import angeelya.inPic.validation.annotation.UniqueLogin;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
