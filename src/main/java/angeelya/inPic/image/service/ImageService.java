@@ -13,7 +13,6 @@ import angeelya.inPic.file.service.ImageFileService;
 import angeelya.inPic.recommedation.service.ActionService;
 import angeelya.inPic.user.service.UserGetService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,7 +32,7 @@ public class ImageService {
     private final ImageGetService imageGetService;
 
     private static final String MS_NOT_FOUND_LIKED_IMAGE = "Liked image not found", MS_SUCCESS_ADD = "Image adding is successful", MS_FAILED_SAVE = "Failed to save image",
-            MS_FORBIDDEN = "User cannot delete other user image", MS_FAILED_UPDATE = "Failed to update image data",
+            MS_FORBIDDEN = "User cannot update other user image", MS_FAILED_UPDATE = "Failed to update image data",
             MS_SUCCESS_UPDATE = "Image updating is successful", MS_NOT_FOUND_CREATED_IMAGE = "No created images found";
 
 
@@ -51,12 +50,12 @@ public class ImageService {
         Image image = imageGetService.getImage(imagePageRequest.getImage_id());
         UserImage userImage = image.getUser().getUserImage();
         actionService.setGrade(imagePageRequest.getUser_id(), image.getId(), true);
-        ImagePageResponse imagePageResponse = ImagePageResponse.builder().
-                user_id(image.getUser().getId()).
-                Name(image.getName()).
-                imgSystemName(image.getImgName()).
-                userName(image.getUser().getName()).
-                imgDescription(image.getDescription())
+        ImagePageResponse imagePageResponse = ImagePageResponse.builder()
+                .user_id(image.getUser().getId())
+                .name(image.getName())
+                .imgSystemName(image.getImgName())
+                .userName(image.getUser().getName())
+                .imgDescription(image.getDescription())
                 .image(imageFileService.getImage(image.getImgName()))
                 .likeCount(image.getLike().size()).build();
         if (userImage != null) imagePageResponse.setUserImg(imageFileService.getImage(userImage.getName()));
@@ -72,7 +71,7 @@ public class ImageService {
                 .name(imageAddRequest.getName())
                 .imgName(multipartFile.getOriginalFilename())
                 .path(imageFileService.getDirectoryPath()).build();
-        if (imageAddRequest.getAlbum_id() != null) image = getAlbumsIntoImage(image, imageAddRequest.getAlbum_id());
+        if (imageAddRequest.getAlbum_id() != null) image.setAlbums(getAlbumsIntoImage(imageAddRequest.getAlbum_id()));
         saveImage(image);
         return MS_SUCCESS_ADD;
     }
@@ -114,9 +113,7 @@ public class ImageService {
         }
     }
 
-    private Image getAlbumsIntoImage(Image image, Long album_id) throws NotFoundDatabaseException {
-        List<Album> albums = List.of(albumService.getAlbum(album_id));
-        image.setAlbums(albums);
-        return image;
+    private List<Album> getAlbumsIntoImage(Long album_id) throws NotFoundDatabaseException {
+        return List.of(albumService.getAlbum(album_id));
     }
 }
