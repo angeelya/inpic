@@ -1,15 +1,15 @@
 package angeelya.inPic.search.controller;
 
-import angeelya.inPic.database.model.Search;
+import angeelya.inPic.dto.request.SearchImageRequest;
+import angeelya.inPic.dto.request.UserInformationRequest;
+import angeelya.inPic.dto.response.ImageResponse;
+import angeelya.inPic.exception_handling.exception.FileException;
 import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.exception_handling.exception.ValidationErrorsException;
-import angeelya.inPic.exception_handling.exception.FileException;
-import angeelya.inPic.validation.service.ValidationErrorsService;
 import angeelya.inPic.search.service.SearchService;
-import angeelya.inPic.dto.request.UserInformationRequest;
-import angeelya.inPic.dto.request.SearchImageRequest;
-import angeelya.inPic.dto.response.ImageResponse;
+import angeelya.inPic.validation.service.ValidationErrorsService;
+import angeelya.inPic.database.model.Search;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

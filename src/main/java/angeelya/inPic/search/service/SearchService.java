@@ -1,18 +1,18 @@
 package angeelya.inPic.search.service;
 
 import angeelya.inPic.database.model.Image;
-import angeelya.inPic.database.model.Search;
-import angeelya.inPic.database.model.User;
 import angeelya.inPic.database.repository.ImageRepository;
 import angeelya.inPic.database.repository.SearchRepository;
+import angeelya.inPic.dto.request.SearchImageRequest;
+import angeelya.inPic.dto.request.UserInformationRequest;
+import angeelya.inPic.dto.response.ImageResponse;
+import angeelya.inPic.exception_handling.exception.FileException;
 import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
-import angeelya.inPic.exception_handling.exception.FileException;
-import angeelya.inPic.file.service.ImageFileService;
-import angeelya.inPic.dto.request.UserInformationRequest;
-import angeelya.inPic.dto.request.SearchImageRequest;
-import angeelya.inPic.dto.response.ImageResponse;
 import angeelya.inPic.user.service.UserGetService;
+import angeelya.inPic.database.model.Search;
+import angeelya.inPic.database.model.User;
+import angeelya.inPic.file.service.ImageFileService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
