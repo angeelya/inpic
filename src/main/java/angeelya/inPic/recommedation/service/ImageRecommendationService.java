@@ -1,16 +1,16 @@
 package angeelya.inPic.recommedation.service;
 
 import angeelya.inPic.database.model.Action;
-import angeelya.inPic.database.model.Recommendation;
-import angeelya.inPic.database.repository.RecommendationRepository;
 import angeelya.inPic.dto.request.UserInformationRequest;
 import angeelya.inPic.dto.response.ImageRecommendationResponse;
-import angeelya.inPic.exception_handling.exception.FileException;
 import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
-import angeelya.inPic.file.service.ImageFileService;
 import angeelya.inPic.image.service.ImageGetService;
 import angeelya.inPic.user.service.UserGetService;
+import angeelya.inPic.database.model.Recommendation;
+import angeelya.inPic.database.repository.RecommendationRepository;
+import angeelya.inPic.exception_handling.exception.FileException;
+import angeelya.inPic.file.service.ImageFileService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
