@@ -44,7 +44,7 @@ public class UserSettingsController {
     }
 
     @PostMapping("/update/image")
-    public ResponseEntity<MessageResponse> updateImage(@RequestPart("file") MultipartFile multipartFile,@RequestPart("user")@Valid UserInformationRequest userInformationRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException, FileException {
+    public ResponseEntity<MessageResponse> updateImage(@RequestPart("file") MultipartFile multipartFile, @RequestPart("user")@Valid UserInformationRequest userInformationRequest, BindingResult bindingResult) throws ValidationErrorsException, NotFoundDatabaseException, NoAddDatabaseException, FileException {
         validationErrorsService.validation(bindingResult);
         return ResponseEntity.ok(new MessageResponse(userSettingsService.updateUserImage(multipartFile,userInformationRequest)));
     }

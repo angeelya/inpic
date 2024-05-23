@@ -1,8 +1,8 @@
 package angeelya.inPic.user.service;
 
+import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.database.model.User;
 import angeelya.inPic.database.repository.UserRepository;
-import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

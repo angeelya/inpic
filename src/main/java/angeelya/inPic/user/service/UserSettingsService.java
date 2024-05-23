@@ -1,13 +1,13 @@
 package angeelya.inPic.user.service;
 
+import angeelya.inPic.dto.request.*;
+import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
+import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
+import angeelya.inPic.exception_handling.exception.PasswordUpdateException;
 import angeelya.inPic.database.model.User;
 import angeelya.inPic.database.model.UserImage;
 import angeelya.inPic.database.repository.UserRepository;
-import angeelya.inPic.dto.request.*;
 import angeelya.inPic.exception_handling.exception.FileException;
-import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
-import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
-import angeelya.inPic.exception_handling.exception.PasswordUpdateException;
 import angeelya.inPic.file.service.ImageFileService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
