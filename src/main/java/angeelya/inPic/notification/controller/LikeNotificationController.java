@@ -2,14 +2,12 @@ package angeelya.inPic.notification.controller;
 
 import angeelya.inPic.dto.request.UserInformationRequest;
 import angeelya.inPic.dto.response.CheckNotificationResponse;
-import angeelya.inPic.dto.response.CommentNotificationResponse;
 import angeelya.inPic.dto.response.LikeNotificationResponse;
 import angeelya.inPic.dto.response.MessageResponse;
 import angeelya.inPic.exception_handling.exception.FileException;
 import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.exception_handling.exception.ValidationErrorsException;
-import angeelya.inPic.notification.service.CommentNotificationService;
 import angeelya.inPic.notification.service.LikeNotificationService;
 import angeelya.inPic.validation.service.ValidationErrorsService;
 import jakarta.validation.Valid;
