@@ -1,6 +1,5 @@
 package angeelya.inPic.database.repository;
 
-import angeelya.inPic.database.model.LikeNotification;
 import angeelya.inPic.database.model.SubscriptionNotification;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
