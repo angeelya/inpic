@@ -1,20 +1,21 @@
 package angeelya.inPic.subscription.service;
 
 import angeelya.inPic.database.model.Friend;
-import angeelya.inPic.database.model.SubscriptionNotification;
-import angeelya.inPic.database.model.User;
-import angeelya.inPic.database.repository.FriendRepository;
 import angeelya.inPic.dto.request.*;
 import angeelya.inPic.dto.response.CountSubscriptionResponse;
 import angeelya.inPic.dto.response.UserSubscriberResponse;
 import angeelya.inPic.dto.response.UserSubscriptionResponse;
-import angeelya.inPic.exception_handling.exception.ExistException;
 import angeelya.inPic.exception_handling.exception.ForbiddenRequestException;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
-import angeelya.inPic.file.service.ImageFileService;
 import angeelya.inPic.notification.service.SubscriptionNotificationService;
 import angeelya.inPic.user.service.UserGetService;
+import angeelya.inPic.database.model.SubscriptionNotification;
+import angeelya.inPic.database.model.User;
+import angeelya.inPic.database.repository.FriendRepository;
+import angeelya.inPic.exception_handling.exception.ExistException;
+import angeelya.inPic.file.service.ImageFileService;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -75,7 +76,7 @@ class SubscriptionServiceTest {
         CountSubscriptionResponse countSubscriptionResponse = new CountSubscriptionResponse(12,13);
         Mockito.when(friendRepository.countByUser_Id(userInformationRequest.getUser_id())).thenReturn(12);
         Mockito.when(friendRepository.countBySubFriend_Id(userInformationRequest.getUser_id())).thenReturn(13);
-        assertEquals(countSubscriptionResponse,subscriptionService.getCounts(userInformationRequest));
+        Assertions.assertEquals(countSubscriptionResponse,subscriptionService.getCounts(userInformationRequest));
     }
 
     @SneakyThrows
@@ -145,11 +146,11 @@ class SubscriptionServiceTest {
         Mockito.when(friendRepository.findBySubFriend_IdAndUser_Id(subscriptionRequest.getSubscription_id(), subscriptionRequest.getUser_id()))
                 .thenReturn(Optional.of(friend));
         CheckFriendResponse checkFriendResponse = new CheckFriendResponse(true);
-        assertEquals(checkFriendResponse,subscriptionService.checkSubscription(subscriptionRequest));
+        Assertions.assertEquals(checkFriendResponse,subscriptionService.checkSubscription(subscriptionRequest));
         Mockito.when(friendRepository.findBySubFriend_IdAndUser_Id(subscriptionRequest.getSubscription_id(), subscriptionRequest.getUser_id()))
                 .thenReturn(Optional.empty());
          checkFriendResponse = new CheckFriendResponse(false);
-        assertEquals(checkFriendResponse,subscriptionService.checkSubscription(subscriptionRequest));
+        Assertions.assertEquals(checkFriendResponse,subscriptionService.checkSubscription(subscriptionRequest));
 
     }
 
@@ -164,11 +165,11 @@ class SubscriptionServiceTest {
         Mockito.when( friendRepository.findByUser_IdAndSubFriend_Id(subscriberRequest.getSubscriber_id(), subscriberRequest.getUser_id()))
                 .thenReturn(Optional.of(friend));
         CheckFriendResponse checkFriendResponse = new CheckFriendResponse(true);
-        assertEquals(checkFriendResponse,subscriptionService.checkSubscriber(subscriberRequest));
+        Assertions.assertEquals(checkFriendResponse,subscriptionService.checkSubscriber(subscriberRequest));
         Mockito.when( friendRepository.findByUser_IdAndSubFriend_Id(subscriberRequest.getSubscriber_id(), subscriberRequest.getUser_id()))
                 .thenReturn(Optional.empty());
         checkFriendResponse = new CheckFriendResponse(false);
-        assertEquals(checkFriendResponse,subscriptionService.checkSubscriber(subscriberRequest));
+        Assertions.assertEquals(checkFriendResponse,subscriptionService.checkSubscriber(subscriberRequest));
 
     }
 }
