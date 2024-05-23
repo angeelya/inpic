@@ -11,6 +11,7 @@ import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.file.service.ImageFileService;
 import angeelya.inPic.image.service.ImageGetService;
 import angeelya.inPic.user.service.UserGetService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -29,13 +30,15 @@ public class ImageRecommendationService {
     private final RecommendationRepository recommendationRepository;
     private final ImageFileService imageFileService;
     private static final Double MIN_RECOMMEND_GRADE = 0.5;
+    @Getter
+    private List<Recommendation> recommendations;
     private static final String MS_NOT_FOUND_LIST = "No image recommendations found", MS_FAILED_ADD_LIST = "Recommendations adding is failed",
             MS_FAILED_UPDATE = "Failed to update recommendations", MS_FAILED_SAVE = "Failed to save recommendation";
 
 
     public void recommend(List<Action> actions, Long user_id) throws NotFoundDatabaseException, NoAddDatabaseException {
         Map<Long, Double> recommendationMap = slopeOne.beginSlopeOne(makeData(actions), user_id);
-        List<Recommendation> recommendations = makeRecommendations(recommendationMap, user_id);
+        recommendations = makeRecommendations(recommendationMap, user_id);
         writeRecommendation(recommendations);
     }
 

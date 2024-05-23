@@ -9,6 +9,7 @@ import angeelya.inPic.exception_handling.exception.NoAddDatabaseException;
 import angeelya.inPic.exception_handling.exception.NotFoundDatabaseException;
 import angeelya.inPic.image.service.CategoryService;
 import angeelya.inPic.user.service.UserGetService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -25,16 +26,18 @@ public class CategoryRecommendationService {
     private final UserGetService userGetService;
     private final CategoryRecommendationRepository categoryRecommendationRepository;
     private final CategoryService categoryService;
+    @Getter
+    private  List<CategoryRecommendation> categoryRecommendations;
     private final Double MIN_RECOMMEND_GRADE = 0.5;
     private static final String MS_NOT_FOUND_LIST="No category recommendations found",MS_FAILED_ADD_LIST="Recommendations adding is failed",
             MS_FAILED_UPDATE="Failed to update category recommendations",MS_FAILED_SAVE="Failed to save category recommendation";
 
 
     public void recommend(List<Action> actions, Long user_id) throws NotFoundDatabaseException, NoAddDatabaseException {
-        Map<Long, Double> recommendationsMap = slopeOne.beginSlopeOne(makeData(actions), user_id);
-        List<CategoryRecommendation> categoryRecommendations = makeRecommendations(recommendationsMap, user_id);
+        Map<Long,Map<Long,Double>>data=makeData(actions);
+        Map<Long, Double> recommendationsMap = slopeOne.beginSlopeOne(data, user_id);
+        categoryRecommendations = makeRecommendations(recommendationsMap, user_id);
         writeRecommendation(categoryRecommendations);
-        saveRecommendations(categoryRecommendations);
     }
 
     public List<CategoryRecommendationResponse> getPopularRecommendations() throws NotFoundDatabaseException {
@@ -51,7 +54,7 @@ public class CategoryRecommendationService {
     private List<CategoryRecommendationResponse> makeCategoryRecommendationResponses(List<CategoryRecommendation> recommendations) {
         return recommendations.stream().map(recommendation ->
                 CategoryRecommendationResponse.builder()
-                        .category_id(recommendation.getId())
+                        .category_id(recommendation.getCategory().getId())
                         .category(recommendation.getCategory().getCategory())
                         .build()).collect(Collectors.toList());
     }
