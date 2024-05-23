@@ -1,6 +1,9 @@
 package angeelya.inPic.notification.service;
 
-import angeelya.inPic.database.model.*;
+import angeelya.inPic.database.model.Friend;
+import angeelya.inPic.database.model.SubscriptionNotification;
+import angeelya.inPic.database.model.User;
+import angeelya.inPic.database.model.UserImage;
 import angeelya.inPic.database.repository.SubscriptionNotificationRepository;
 import angeelya.inPic.dto.request.UserInformationRequest;
 import angeelya.inPic.dto.response.CheckNotificationResponse;
