@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserSettingsService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final UserRepository userRepository;
-    private final UserGetService userService;
+    private final UserGetService userGetService;
     private final ImageFileService imageFileService;
     private final PasswordEncoder passwordEncoder;
     private static final String MS_SUCCESS = "updating is successful",
@@ -30,7 +30,7 @@ public class UserSettingsService {
             MS_FAILED_ADD = "Failed to add to BD",MS_FAILED_UPDATE_PASSWORD="Old password does not match or new password is the same as old one ";
 
     public String updateEmail(EmailUpdateRequest emailUpdateRequest) throws NotFoundDatabaseException, NoAddDatabaseException {
-        User user = userService.getUser(emailUpdateRequest.getUser_id());
+        User user = userGetService.getUser(emailUpdateRequest.getUser_id());
         user.setEmail(emailUpdateRequest.getEmail());
         user = saveUser(user);
         if (!user.getEmail().equals(emailUpdateRequest.getEmail())) {
@@ -41,7 +41,7 @@ public class UserSettingsService {
     }
 
     public String updateName(NameUpdateRequest nameUpdateRequest) throws NotFoundDatabaseException, NoAddDatabaseException {
-        User user = userService.getUser(nameUpdateRequest.getUser_id());
+        User user = userGetService.getUser(nameUpdateRequest.getUser_id());
         user.setName(nameUpdateRequest.getName());
         user = saveUser(user);
         if (!user.getName().equals(nameUpdateRequest.getName())) {
@@ -52,7 +52,7 @@ public class UserSettingsService {
     }
 
     public String updateDescription(DescriptionUpdateRequest descriptionUpdateRequest) throws NotFoundDatabaseException, NoAddDatabaseException {
-        User user = userService.getUser(descriptionUpdateRequest.getUser_id());
+        User user = userGetService.getUser(descriptionUpdateRequest.getUser_id());
         user.setDescription(descriptionUpdateRequest.getDescription());
         user = saveUser(user);
         if (!user.getDescription().equals(descriptionUpdateRequest.getDescription())) {
@@ -63,7 +63,7 @@ public class UserSettingsService {
     }
 
     public String updatePassword(PasswordUpdateRequest passwordUpdateRequest) throws PasswordUpdateException, NotFoundDatabaseException, NoAddDatabaseException {
-        User user = userService.getUser(passwordUpdateRequest.getUser_id());
+        User user = userGetService.getUser(passwordUpdateRequest.getUser_id());
         String oldPass = passwordUpdateRequest.getOldPassword(),
                 newPass = passwordUpdateRequest.getNewPassword(), realPass = user.getPassword();
         if (!passwordEncoder.matches(oldPass, realPass) || passwordEncoder.matches(newPass, realPass))
@@ -78,13 +78,13 @@ public class UserSettingsService {
     }
 
     public String updateUserImage(MultipartFile multipartFile, UserInformationRequest userInformationRequest) throws NotFoundDatabaseException, NoAddDatabaseException, FileException {
-        User user = userService.getUser(userInformationRequest.getUser_id());
+        User user = userGetService.getUser(userInformationRequest.getUser_id());
         UserImage userImage = user.getUserImage();
         if (userImage == null) userImage = UserImage.builder().user(user).build();
         userImage.setPath(imageFileService.getDirectoryPath());
         userImage.setName(multipartFile.getOriginalFilename());
         user.setUserImage(userImage);
-        saveUser(user);
+        user=saveUser(user);
         imageFileService.saveImage(multipartFile);
         if (!user.getUserImage().getName().equals(userImage.getName())) throw new NoAddDatabaseException(MS_FAILED + " user image");
         return "User image " + MS_SUCCESS;
